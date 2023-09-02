@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using WinFormsApp1.CommonUtils;
+using WinFormsApp1.KeyGen.API_logic;
 using static WinFormsApp1.KeyGen.StaticData.StaticData;
 using static WinFormsApp1.DerjavaTools;
+using static System.Windows.Forms.LinkLabel;
 
 namespace WinFormsApp1.KeyGen.Program_logic.FileGenerator;
 
@@ -10,11 +12,7 @@ public class SNILS_generator
     protected static Dictionary<string, string> snilsDictionary = new Dictionary<string, string>();
     protected static ArrayList existedFileData = new ArrayList();
     protected static string SNILS = null;
-    protected static string INN_IP;
-    protected static string INN_UL;
-    protected static string commonName;
-    protected static string FIO;
-
+    private static List<string> lines = new List<string>();
     protected static string finalResult;
 
 
@@ -35,8 +33,9 @@ public class SNILS_generator
         return numberStr + checkSum;
     }
 
-    public static void checkSNILSwarehouse()
+    public static List<string> checkSNILSwarehouse()
     {
+        lines.Clear();
         if (!Directory.Exists(snilsfolderPath))
         {
             Directory.CreateDirectory(snilsfolderPath);
@@ -48,35 +47,29 @@ public class SNILS_generator
             using (StreamReader streamReader = File.OpenText(snilsFilePath))
             {
                 string fileData = streamReader.ReadToEnd();
-                string[] lines = fileData.Split("\n");
-                int linesCount = lines.Length;
-                foreach (string line in lines)
+                foreach (string singleLine in fileData.Split("\n"))
                 {
-                    if (line.Length > 0)
+
+                    if (!string.IsNullOrEmpty(singleLine))
                     {
-                        string[] blocks = line.Split("~");
-
-                        if (!snilsDictionary.ContainsKey(blocks[3]))
-                        {
-                            snilsDictionary.Add(blocks[3], blocks[5]); //сохраняем пару ИНН ФЛ + СНИЛС
-                        }
-                        existedFileData.Add(blocks[1] + "~" + blocks[2] + "~" + blocks[3] + "~" + blocks[4] + "~" + blocks[5]);
-                        addRow(line);
-
+                        lines.Add(singleLine);
                     }
 
                 }
             }
+
+            return lines;
         }
 
         catch (Exception e)
         {
             FilesCreator.Log_creator(e);
-            MessageBoxCreator.craeteMessageBox("Произошла ошибка во время разбора файла со СНИЛС", "Ошибка разбора файла СНИЛС", MessageBoxIcon.Error);
+            throw;
+
         }
     }
 
-    public static void saveUsedSnils(string[] subjectData)
+    public static List<string> saveUsedSnils(ClientObj client)
     {
         DateTime date = DateTime.Now; //ToString("d") для получения только даты
 
@@ -87,61 +80,53 @@ public class SNILS_generator
 
         try
         {
-
-            if (commonName == null && INN_UL == null)
+            string FIO = client.Surname + " " + client.Name.Substring(0, 1) + ". " + client.LastName.Substring(0, 1) + ".";
+            if (client.SubjectINN.Length == 10 && !string.IsNullOrEmpty(client.CommonName))
             {
-                switch (subjectData[0])
-                {
-                    case "IP":
-                        finalResult = "Индвивидуальный предприниматель" + "~" + "Нет данных" + "~" + INN_IP + "~" + FIO + "~" + SNILS + "\n"; break;
-                    case "FL":
-                        finalResult = "Физическое лицо" + "~" + "Нет данных" + "~" + INN_IP + "~" + FIO + "~" + SNILS + "\n"; break;
-                }
+                finalResult = client.CommonName + "~" + client.INN_UL + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
-            else
+            else if (client.INN_IP.Length == 12 && string.IsNullOrEmpty(client.OGRNIP))
             {
-                finalResult = commonName + "~" + INN_UL + "~" + INN_IP + "~" + FIO + "~" + SNILS + "\n";
+                finalResult = "Индвивидуальный предприниматель" + "~" + "Нет данных" + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
+            }
+            else if (client.INN_IP.Length == 12 && client.OGRNIP.Length > 0)
+            {
+                finalResult = "Физическое лицо" + "~" + "Нет данных" + "~" +  FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
 
-            if (!existedFileData.Contains(finalResult))
+            if (!lines.Contains(finalResult))
             {
+                lines.Add(finalResult);
                 File.AppendAllText(snilsFilePath, date + "~" + finalResult);
-                finalResult = null;
             }
-            addRow(finalResult);
+            return lines;
+
         }
         catch (Exception e)
         {
             FilesCreator.Log_creator(e);
-            MessageBoxCreator.craeteMessageBox("Произошла ошибка во время занесеиня данных о СНИЛС в файл", "Ошибка сохранения данных СНИЛС", MessageBoxIcon.Error);
+            lines.Clear();
+            throw;
         }
     }
 
-    public static string setSNILS(Dictionary<string, string> client)
+    public static string setSNILS(string INN_IP)
     {
-        INN_IP = client["IP"];
-        INN_UL = client["UL"];
-        commonName = client["CommonName"];
-        FIO = client["FIO"];
-        if (snilsDictionary.ContainsKey(INN_IP))
+
+        foreach (var singleClient in lines)
         {
-            SNILS = snilsDictionary[INN_IP];
-        }
-        else
-        {
-            SNILS = GenerateSnils();
+            string[] blocks = singleClient.Split("~");
+            if (blocks[3].Equals(INN_IP))
+            {
+                SNILS = blocks[5];
+            }
+            else
+            {
+                SNILS = GenerateSnils();
+            }
         }
 
         return SNILS;
     }
 
-    public static void addRow(string Line)
-    {
-        string[] blocks = Line.Split("~");
-        SNILS_Table.Rows.Add();
-        for (int i = 0; i < blocks.Length; i++)
-        {
-            SNILS_Table.Rows[^1].Cells[i].Value = blocks[i];
-        }
-    }
 }

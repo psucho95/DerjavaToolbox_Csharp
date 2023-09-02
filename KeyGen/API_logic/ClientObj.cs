@@ -123,6 +123,10 @@ public class ClientObj
 
     
     string subjectINN;
+    public string SubjectINN
+    {
+        get => subjectINN;
+    }
     XmlDocument response;
     XmlDocument? clientData;
     Suggestion<Party> daData;
@@ -141,7 +145,6 @@ public class ClientObj
         {
             clientData = await ResponseObj.getClientResponseAsync(subjectINN, button);
             daData = await ResponseObj.getDaDataAdressAsyncAsync(subjectINN);
-            SNILS = "TEMPO";
 
             switch (subjectINN.Length)
             {
@@ -199,12 +202,9 @@ public class ClientObj
             }
             else
             {
-                clienDictionary.Add("UL", INN_UL);
-                clienDictionary.Add("IP", INN_IP);
-                clienDictionary.Add("CommonName", commonName);
-                clienDictionary.Add("FIO", Surname + " " + Name.Substring(0,1) + ". " + LastName.Substring(0,1) + ".");
+                SNILS = SNILS_generator.setSNILS(INN_IP);
             }
-            SNILS = SNILS_generator.setSNILS(clienDictionary);
+            
         }
        
         catch (Exception exception)

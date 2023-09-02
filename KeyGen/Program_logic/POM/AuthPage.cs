@@ -19,7 +19,7 @@ public class AuthPage
     By passwordInput = By.Id("ctl00_MainContent_MasterPageBodyASPxRoundPanel_ASPxRoundPanel1_LoginUser_Password_I");
     By authButton = By.Id("ctl00_MainContent_MasterPageBodyASPxRoundPanel_ASPxRoundPanel1_LoginUser_LoginButton_CD");
    
-    public void FillAuthData(RegisterPage registerPage)
+    public async Task FillAuthData(RegisterPage registerPage)
     {
         new WebDriverWait(AuthPageDriver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(hereRedirect));
         AuthPageDriver.FindElement(hereRedirect).Click();

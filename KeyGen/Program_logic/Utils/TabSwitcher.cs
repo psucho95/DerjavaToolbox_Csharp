@@ -7,8 +7,6 @@ public class TabSwitcher
 {
     public static void switchTo(IWebDriver driver, int tabNum)
     {
-        List<string> Tabs = new List<string>(driver.WindowHandles);
-        Console.WriteLine();
-        //driver.SwitchTo(Tabs.Find(tabNum - 1));
+        driver.SwitchTo().Window(driver.WindowHandles.Last());
     }
 }

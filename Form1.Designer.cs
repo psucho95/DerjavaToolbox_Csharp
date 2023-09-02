@@ -241,6 +241,7 @@
             // IP_rb
             // 
             IP_rb.AutoSize = true;
+            IP_rb.Enabled = false;
             IP_rb.Location = new Point(376, 0);
             IP_rb.Name = "IP_rb";
             IP_rb.Size = new Size(224, 19);
@@ -252,6 +253,7 @@
             // UL_rb
             // 
             UL_rb.AutoSize = true;
+            UL_rb.Enabled = false;
             UL_rb.Location = new Point(3, 0);
             UL_rb.Name = "UL_rb";
             UL_rb.Size = new Size(133, 19);
@@ -263,6 +265,7 @@
             // FL_rb
             // 
             FL_rb.AutoSize = true;
+            FL_rb.Enabled = false;
             FL_rb.Location = new Point(197, 0);
             FL_rb.Name = "FL_rb";
             FL_rb.Size = new Size(122, 19);

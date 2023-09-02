@@ -28,33 +28,40 @@ public class PersonalCabinet
     bool thisSuccess = false;
 
 
-    public void PersonalCabinetCreateCert()
+    public async Task PersonalCabinetCreateCert()
     {
         try
         {
             new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(20)).Until(ExpectedConditions.ElementIsVisible(validCertsPage));
             PersonalCabinetDriver.FindElement(validCertsPage).Click();
             Main_ProgressBar.Value = 35;
+
             new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(20)).Until(ExpectedConditions.ElementIsVisible(createCert));
             PersonalCabinetDriver.FindElement(createCert).Click();
             Main_ProgressBar.Value = 40;
-            new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(5)).Until(ExpectedConditions.ElementIsVisible(createCertFile));
 
-            new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.TextToBePresentInElement(PersonalCabinetDriver.FindElement(expectedGOSTdata), "ГОСТ Р 34.11-2012 256 бит"));
+
+            new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(5)).Until(ExpectedConditions.ElementIsVisible(createCertFile));
+            IWebElement gost = PersonalCabinetDriver.FindElement(expectedGOSTdata);
+            new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.TextToBePresentInElementValue(gost, "ГОСТ Р 34.11-2012 256 бит"));
             PersonalCabinetDriver.FindElement(createCertFile).Click();
             Main_ProgressBar.Value = 50;
+
             new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(60)).Until(ExpectedConditions.ElementToBeClickable(reloadButton)); // Ожидалка генерации файла от крипты
             PersonalCabinetDriver.FindElement(reloadButton).Click();
             Main_ProgressBar.Value = 60;
+
             new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(20)).Until(ExpectedConditions.ElementToBeClickable(setupCertButton));
             PersonalCabinetDriver.FindElement(setupCertButton).Click();
             Main_ProgressBar.Value = 70;
+
             TabSwitcher.switchTo(PersonalCabinetDriver, 2);
             new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(5));
 
             new WebDriverWait(PersonalCabinetDriver, TimeSpan.FromSeconds(20)).Until(ExpectedConditions.ElementToBeClickable(setupCertLocal));
             PersonalCabinetDriver.FindElement(setupCertLocal).Click();
             Main_ProgressBar.Value = 80;
+
             try
             { // оджидалка окончания последнего взаимодействия с криптой
                 Thread.Sleep(8000); // ожидание в миллисекундах
@@ -62,6 +69,7 @@ public class PersonalCabinet
             catch (ThreadInterruptedException e)
             {
                 FilesCreator.Log_creator(e);
+                throw;
             }
             PersonalCabinetDriver.FindElement(confirmSettingUp).Click();
             Main_ProgressBar.Value = 90;
@@ -72,6 +80,7 @@ public class PersonalCabinet
             catch (ThreadInterruptedException e)
             {
                 FilesCreator.Log_creator(e);
+                throw;
             }
 
             IAlert alert = PersonalCabinetDriver.SwitchTo().Alert();
@@ -87,9 +96,9 @@ public class PersonalCabinet
         }
         catch (Exception e)
         {
-            FilesCreator.Log_creator(e);
             PersonalCabinetDriver.Quit();
             thisSuccess = false;
+            throw;
         }
 
     }

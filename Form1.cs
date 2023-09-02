@@ -10,31 +10,16 @@ namespace WinFormsApp1
     public partial class DerjavaTools : Form
     {
         private string[] subjectInfo = new string[2];
-        public static DataGridView SNILS_Table = null;
-        public static ProgressBar Main_ProgressBar = null;
-        public static MaskedTextBox Main_INN_input = null;
-        public static Panel Main_BlockerPanel = null;
-        public static Label Main_BlockerLabel = null;
-        public static Button Main_getINNdata_btn, Main_downloadEGR_btn, Main_registerINN_btn = null;
-        public static CheckBox Main_httpFix_chb, Main_showBrowser_chb = null;
-        public static Panel Main_InputsPannel = null;
         protected ClientObj client;
+        public static ProgressBar Main_ProgressBar;
+        private bool isCompleteData;
 
         public DerjavaTools()
         {
             InitializeComponent();
-            SNILS_Table = SNILS_DataGridView;
             Main_ProgressBar = formProgressBar;
-            Main_INN_input = INN_input;
-            Main_BlockerPanel = BlockerPanel;
-            Main_BlockerLabel = BlockerLabel;
-            Main_getINNdata_btn = getINNdata_btn;
-            Main_downloadEGR_btn = downloadEGR_btn;
-            Main_registerINN_btn = registerINN_btn;
-            Main_httpFix_chb = httpFix_chb;
-            Main_showBrowser_chb = showBrowser_chb;
-            Main_InputsPannel = InputsPannel;
-            SNILS_generator.checkSNILSwarehouse();
+            updateTable(SNILS_generator.checkSNILSwarehouse());
+
         }
         private void downloadEGR_btn_Click(object sender, EventArgs e)
         {
@@ -193,16 +178,52 @@ namespace WinFormsApp1
             }
         }
 
-        private void registerINN_btn_Click(object sender, EventArgs e)
+        private async void registerINN_btn_Click(object sender, EventArgs e)
         {
-            BlockerPanel.Enabled = true;
-            BlockerLabel.Enabled = true;
-            BlockerPanel.Visible = true;
-            BlockerLabel.Visible = true;
-            Task.Run(() => {
+            try
+            {
+
+                BlockerPanel.Enabled = true;
+                BlockerPanel.Visible = true;
+                BlockerLabel.Enabled = true;
+                BlockerLabel.Visible = true;
+
                 KeyCreationTask keyCreation = new KeyCreationTask(client, subjectInfo);
-                keyCreation.runKeyTask();
-            });
+                isCompleteData = await keyCreation.runKeyTask();
+                if (isCompleteData)
+                {
+                    SNILS_generator.saveUsedSnils(client);
+                    updateTable(SNILS_generator.checkSNILSwarehouse());
+                }
+
+
+                BlockerPanel.Enabled = false;
+                BlockerPanel.Visible = false;
+                BlockerLabel.Enabled = false;
+                BlockerLabel.Visible = false;
+                showBrowser_chb.Enabled = false;
+                registerINN_btn.Enabled = false;
+                downloadEGR_btn.Enabled = false;
+                INN_input.Clear();
+                formProgressBar.Value = 0;
+                MassPropertyChanger.setDefaultData(InputsPannel);
+
+            }
+            catch (Exception exception)
+            {
+                FilesCreator.Log_creator(exception);
+                BlockerPanel.Enabled = false;
+                BlockerPanel.Visible = false;
+                BlockerLabel.Enabled = false;
+                BlockerLabel.Visible = false;
+                showBrowser_chb.Enabled = false;
+                registerINN_btn.Enabled = false;
+                downloadEGR_btn.Enabled = false;
+                INN_input.Clear();
+                formProgressBar.Value = 0;
+                MassPropertyChanger.setDefaultData(InputsPannel);
+                MessageBoxCreator.craeteMessageBox("Не удалось создать ключ по заданным параметрам!", "Ошибка создания ключа", MessageBoxIcon.Error);
+            }
         }
         private void httpFix_chb_CheckedChanged(object sender, EventArgs e)
         {
@@ -213,5 +234,16 @@ namespace WinFormsApp1
         {
             BasePage.setSetHeadless(!showBrowser_chb.Checked);
         }
+        void updateTable(List<string> TableData)
+        {
+                SNILS_DataGridView.Rows.Clear();
+                foreach (var line in TableData)
+            {
+                string[] rowData = line.Split("~");
+                SNILS_DataGridView.Rows.Add(rowData);
+            }
+
+        }
     }
+
 }

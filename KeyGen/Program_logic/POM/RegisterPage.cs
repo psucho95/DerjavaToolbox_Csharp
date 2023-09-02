@@ -70,7 +70,7 @@ public class RegisterPage : BasePage
         return new string(loginArr);
     }
 
-    public void FillForm(ClientObj Client, String[] subjectState, String INN_from_input)
+    public async Task FillForm(ClientObj Client, String[] subjectState, String INN_from_input)
     {
         if (INN_from_input.Length == 10 && subjectState[0].Equals("UL"))
         {
@@ -160,7 +160,7 @@ public class RegisterPage : BasePage
         }
 
     }
-    public void GetRegister()
+    public async Task GetRegister()
     {
         try
         {
@@ -181,7 +181,4 @@ public class RegisterPage : BasePage
             FilesCreator.Log_creator(e);
         }
     }
-
-
-
 }
