@@ -14,8 +14,6 @@ public class BasePage
     {
         try
         {
-
-
             ChromeOptions options = new ChromeOptions();
             var service = ChromeDriverService.CreateDefaultService();
 

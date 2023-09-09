@@ -1,3 +1,5 @@
+using RestSharp;
+using System.Windows.Forms;
 using WinFormsApp1.CommonUtils;
 using WinFormsApp1.KeyGen.API_logic;
 using WinFormsApp1.KeyGen.Program_logic.FileGenerator;
@@ -18,8 +20,8 @@ namespace WinFormsApp1
         {
             InitializeComponent();
             Main_ProgressBar = formProgressBar;
+            formProgressBar.BackColor = Color.DarkTurquoise;
             updateTable(SNILS_generator.checkSNILSwarehouse());
-
         }
         private void downloadEGR_btn_Click(object sender, EventArgs e)
         {
@@ -27,7 +29,7 @@ namespace WinFormsApp1
             FilesCreator.saveSysIdAsync(INN_input.Text);
             switch (INN_UL_input.Text.Length)
             {
-                case <= 0: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_IP_Input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
+                case 12: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_IP_Input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
                 case 10: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_UL_input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
             }
 
@@ -159,9 +161,9 @@ namespace WinFormsApp1
             }
 
         }
-
         private void createHistory_chb_CheckedChanged(object sender, EventArgs e)
         {
+
             if (this.Height != 610)
             {
                 SNILS_DataGridView.Enabled = false;
@@ -177,25 +179,24 @@ namespace WinFormsApp1
 
             }
         }
-
         private async void registerINN_btn_Click(object sender, EventArgs e)
         {
             try
             {
-
+                CancellationTokenSource cts = new CancellationTokenSource();
                 BlockerPanel.Enabled = true;
                 BlockerPanel.Visible = true;
                 BlockerLabel.Enabled = true;
                 BlockerLabel.Visible = true;
 
+
                 KeyCreationTask keyCreation = new KeyCreationTask(client, subjectInfo);
-                isCompleteData = await keyCreation.runKeyTask();
-                if (isCompleteData)
+                await Task.Run(() => keyCreation.runKeyTask(cts.Token), cts.Token); // передача CancellationToken
+                if (keyCreation.isCompleteWork())
                 {
                     SNILS_generator.saveUsedSnils(client);
                     updateTable(SNILS_generator.checkSNILSwarehouse());
                 }
-
 
                 BlockerPanel.Enabled = false;
                 BlockerPanel.Visible = false;
@@ -205,9 +206,14 @@ namespace WinFormsApp1
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
                 INN_input.Clear();
-                formProgressBar.Value = 0;
-                MassPropertyChanger.setDefaultData(InputsPannel);
 
+                MassPropertyChanger.setDefaultData(InputsPannel);
+                MassPropertyChanger.disableAllSubjectControl(subjectControl);
+                formProgressBar.BackColor = Color.Green;
+                Thread.Sleep(1000);
+                formProgressBar.Value = 0;
+                MessageBoxCreator.craeteMessageBox("Ключ с ИНН " + client.SubjectINN + " был успешно создан в системе", "Ключ был успешно создан", MessageBoxIcon.Information);
+                client = null;
             }
             catch (Exception exception)
             {
@@ -222,22 +228,25 @@ namespace WinFormsApp1
                 INN_input.Clear();
                 formProgressBar.Value = 0;
                 MassPropertyChanger.setDefaultData(InputsPannel);
+                MassPropertyChanger.disableAllSubjectControl(subjectControl);
+                formProgressBar.BackColor = Color.DarkRed;
+                Thread.Sleep(1000);
                 MessageBoxCreator.craeteMessageBox("Не удалось создать ключ по заданным параметрам!", "Ошибка создания ключа", MessageBoxIcon.Error);
+                client = null;
             }
         }
         private void httpFix_chb_CheckedChanged(object sender, EventArgs e)
         {
             BasePage.setHTTP_protocol(httpFix_chb.Checked);
         }
-
         private void showBrowser_chb_CheckedChanged(object sender, EventArgs e)
         {
             BasePage.setSetHeadless(!showBrowser_chb.Checked);
         }
         void updateTable(List<string> TableData)
         {
-                SNILS_DataGridView.Rows.Clear();
-                foreach (var line in TableData)
+            SNILS_DataGridView.Rows.Clear();
+            foreach (var line in TableData)
             {
                 string[] rowData = line.Split("~");
                 SNILS_DataGridView.Rows.Add(rowData);
@@ -245,5 +254,4 @@ namespace WinFormsApp1
 
         }
     }
-
 }

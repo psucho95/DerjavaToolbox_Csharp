@@ -7,6 +7,7 @@ using WinFormsApp1.KeyGen.Program_logic.Utils;
 namespace WinFormsApp1.KeyGen.Program_logic.POM;
 
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Markup;
 using static WinFormsApp1.DerjavaTools;
 
@@ -16,7 +17,7 @@ public class KeyCreationTask
     private string[] subjectData;
     private ClientObj client;
     private IWebDriver threadDriver;
-    private Dictionary<string, string> isCompleteData;
+    private bool isCompleteData;
     private RegisterPage registerPage;
     AuthPage authPage;
     PersonalCabinet personalCabinet;
@@ -29,13 +30,15 @@ public class KeyCreationTask
         this.client = client;
     }
 
-    public async Task<bool> runKeyTask()
+    public async Task runKeyTask(CancellationToken cancellationToken)
     {
         try
         {
             registerPage = new RegisterPage(Main_ProgressBar);
             threadDriver = registerPage.getWebDriver();
             registerPage.FillForm(client, subjectData, client.SubjectINN);
+
+
             registerPage.GetRegister();
 
             authPage = new AuthPage(registerPage);
@@ -44,13 +47,21 @@ public class KeyCreationTask
             personalCabinet = new PersonalCabinet(authPage);
             personalCabinet.PersonalCabinetCreateCert();
             threadDriver.Quit();
+
+            isCompleteData = true;
         }
-        catch (Exception e)
+
+        catch (Exception exception)
         {
             threadDriver.Quit();
-            isCompleteData.Clear();
+            isCompleteData = false;
             throw;
+
         }
-        return personalCabinet.getResult();
+    }
+
+    public bool isCompleteWork()
+    {
+        return isCompleteData;
     }
 }

@@ -83,4 +83,15 @@ public class MassPropertyChanger
             }
         }
     }
+
+    public static void disableAllSubjectControl(Control control)
+    {
+        foreach (Control elem in control.Controls)
+        {
+            if (elem is RadioButton)
+            {
+                elem.Enabled = false;
+            }
+        }
+    }
 }

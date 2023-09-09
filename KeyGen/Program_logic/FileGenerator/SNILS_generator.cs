@@ -87,11 +87,11 @@ public class SNILS_generator
             }
             else if (client.INN_IP.Length == 12 && string.IsNullOrEmpty(client.OGRNIP))
             {
-                finalResult = "Индвивидуальный предприниматель" + "~" + "Нет данных" + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
+                finalResult = "Физическое лицо" + "~" + "Нет данных" + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
             else if (client.INN_IP.Length == 12 && client.OGRNIP.Length > 0)
             {
-                finalResult = "Физическое лицо" + "~" + "Нет данных" + "~" +  FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
+                finalResult = "Инд. предприниматель" + "~" + "Нет данных" + "~" +  FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
 
             if (!lines.Contains(finalResult))
@@ -116,7 +116,7 @@ public class SNILS_generator
         foreach (var singleClient in lines)
         {
             string[] blocks = singleClient.Split("~");
-            if (blocks[3].Equals(INN_IP))
+            if (blocks[4].Equals(INN_IP))
             {
                 SNILS = blocks[5];
             }

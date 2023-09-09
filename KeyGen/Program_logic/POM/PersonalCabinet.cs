@@ -66,9 +66,8 @@ public class PersonalCabinet
             { // оджидалка окончания последнего взаимодействия с криптой
                 Thread.Sleep(8000); // ожидание в миллисекундах
             }
-            catch (ThreadInterruptedException e)
+            catch (ThreadInterruptedException exception)
             {
-                FilesCreator.Log_creator(e);
                 throw;
             }
             PersonalCabinetDriver.FindElement(confirmSettingUp).Click();
@@ -77,9 +76,8 @@ public class PersonalCabinet
             { // ожидалка перед кликом по алерту
                 Thread.Sleep(5000);
             }
-            catch (ThreadInterruptedException e)
+            catch (ThreadInterruptedException exception)
             {
-                FilesCreator.Log_creator(e);
                 throw;
             }
 
@@ -94,7 +92,7 @@ public class PersonalCabinet
             Main_ProgressBar.Value = 100;
 
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
             PersonalCabinetDriver.Quit();
             thisSuccess = false;

@@ -21,7 +21,9 @@ public class AuthPage
    
     public async Task FillAuthData(RegisterPage registerPage)
     {
-        new WebDriverWait(AuthPageDriver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(hereRedirect));
+        try
+        {
+            new WebDriverWait(AuthPageDriver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(hereRedirect));
         AuthPageDriver.FindElement(hereRedirect).Click();
         Main_ProgressBar.Value = 16;
         AuthPageDriver.FindElement(loginInput).SendKeys(registerPage.savedLogin);
@@ -30,6 +32,11 @@ public class AuthPage
         Main_ProgressBar.Value = 25;
         AuthPageDriver.FindElement(authButton).Click();
         Main_ProgressBar.Value = 30;
+        }
+        catch (Exception e)
+        {
+            throw;
+        }
     }
 
     public IWebDriver getAuthPageDriver()

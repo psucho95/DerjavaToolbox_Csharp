@@ -70,12 +70,15 @@ public class RegisterPage : BasePage
         return new string(loginArr);
     }
 
-    public async Task FillForm(ClientObj Client, String[] subjectState, String INN_from_input)
+    public void FillForm(ClientObj Client, String[] subjectState, String INN_from_input)
     {
-        if (INN_from_input.Length == 10 && subjectState[0].Equals("UL"))
+        try
         {
-            try
+
+
+            if (INN_from_input.Length == 10 && subjectState[0].Equals("UL"))
             {
+
                 mainPageDriver.FindElement(commonName).SendKeys(Client.CommonName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
@@ -103,18 +106,13 @@ public class RegisterPage : BasePage
                 mainPageDriver.FindElement(innUL).SendKeys(Client.INN_UL);
                 progressBar.Value = 15;
             }
-            catch (Exception e)
-            {
-                FilesCreator.Log_creator(e);
-            }
-        }
 
-        else if (INN_from_input.Length == 12 && subjectState[0].Equals("IP"))
-        {
-            try
+            else if (INN_from_input.Length == 12 && subjectState[0].Equals("IP"))
             {
 
-                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
+
+                mainPageDriver.FindElement(commonName)
+                    .SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
                 progressBar.Value = 3;
@@ -130,17 +128,13 @@ public class RegisterPage : BasePage
                 progressBar.Value = 15;
 
             }
-            catch (Exception e)
-            {
-                FilesCreator.Log_creator(e);
-            }
-        }
-        else if (INN_from_input.Length == 12 && subjectState[0].Equals("FL"))
-        {
-            try
+
+            else if (INN_from_input.Length == 12 && subjectState[0].Equals("FL"))
             {
 
-                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
+
+                mainPageDriver.FindElement(commonName)
+                    .SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
                 progressBar.Value = 3;
@@ -153,32 +147,32 @@ public class RegisterPage : BasePage
                 mainPageDriver.FindElement(innIP).SendKeys(Client.INN_IP);
                 progressBar.Value = 13;
             }
-            catch (Exception e)
+
+        }
+        catch (Exception exception)
+        {
+            throw;
+        }
+    }
+
+    public void GetRegister()
+        {
+            try
             {
-                FilesCreator.Log_creator(e);
+
+                IWebElement loginField = mainPageDriver.FindElement(login);
+                ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(By.Id("credentials")));
+                loginString = getLogin();
+                loginField.Click();
+                loginField.SendKeys(loginString);
+                IWebElement pwdForm = mainPageDriver.FindElement(password);
+                pwdForm.Click();
+                passwordString = pwdForm.GetAttribute("value");
+                ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(registrBTN));
+                mainPageDriver.FindElement(registrBTN).Click();
+            }
+            catch (Exception exception)
+            {
             }
         }
-
     }
-    public async Task GetRegister()
-    {
-        try
-        {
-
-            IWebElement loginField = mainPageDriver.FindElement(login);
-            ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(By.Id("credentials")));
-            loginString = getLogin();
-            loginField.Click();
-            loginField.SendKeys(loginString);
-            IWebElement pwdForm = mainPageDriver.FindElement(password);
-            pwdForm.Click();
-            passwordString = pwdForm.GetAttribute("value");
-            ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(registrBTN));
-            mainPageDriver.FindElement(registrBTN).Click();
-        }
-        catch (Exception e)
-        {
-            FilesCreator.Log_creator(e);
-        }
-    }
-}

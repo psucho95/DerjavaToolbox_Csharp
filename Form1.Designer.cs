@@ -35,12 +35,6 @@
             BlockerLabel = new Label();
             panel1 = new Panel();
             SNILS_DataGridView = new DataGridView();
-            Date_clmn = new DataGridViewTextBoxColumn();
-            CommonName_clmn = new DataGridViewTextBoxColumn();
-            INN_UL_clmn = new DataGridViewTextBoxColumn();
-            FIO_clmn = new DataGridViewTextBoxColumn();
-            INN_IP_clmn = new DataGridViewTextBoxColumn();
-            SNILS_clmn = new DataGridViewTextBoxColumn();
             subjectControl = new Panel();
             IP_rb = new RadioButton();
             UL_rb = new RadioButton();
@@ -84,6 +78,12 @@
             INN_input = new MaskedTextBox();
             INN_label = new Label();
             MainTabControl = new TabControl();
+            Date_clmn = new DataGridViewTextBoxColumn();
+            CommonName_clmn = new DataGridViewTextBoxColumn();
+            INN_UL_clmn = new DataGridViewTextBoxColumn();
+            FIO_clmn = new DataGridViewTextBoxColumn();
+            INN_IP_clmn = new DataGridViewTextBoxColumn();
+            SNILS_clmn = new DataGridViewTextBoxColumn();
             OtherTools = new TabPage();
             KeyGenTab.SuspendLayout();
             BlockerPanel.SuspendLayout();
@@ -180,54 +180,6 @@
             SNILS_DataGridView.TabIndex = 0;
             SNILS_DataGridView.Visible = false;
             // 
-            // Date_clmn
-            // 
-            Date_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            Date_clmn.Frozen = true;
-            Date_clmn.HeaderText = "Дата";
-            Date_clmn.MinimumWidth = 60;
-            Date_clmn.Name = "Date_clmn";
-            Date_clmn.ReadOnly = true;
-            Date_clmn.Width = 60;
-            // 
-            // CommonName_clmn
-            // 
-            CommonName_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            CommonName_clmn.HeaderText = "Общее имя";
-            CommonName_clmn.Name = "CommonName_clmn";
-            CommonName_clmn.ReadOnly = true;
-            CommonName_clmn.Width = 96;
-            // 
-            // INN_UL_clmn
-            // 
-            INN_UL_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            INN_UL_clmn.HeaderText = "ИНН ЮЛ";
-            INN_UL_clmn.Name = "INN_UL_clmn";
-            INN_UL_clmn.ReadOnly = true;
-            INN_UL_clmn.Width = 82;
-            // 
-            // FIO_clmn
-            // 
-            FIO_clmn.HeaderText = "ФИО ИП/ФЛ";
-            FIO_clmn.Name = "FIO_clmn";
-            FIO_clmn.ReadOnly = true;
-            // 
-            // INN_IP_clmn
-            // 
-            INN_IP_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            INN_IP_clmn.HeaderText = "ИНН ИП/ФЛ";
-            INN_IP_clmn.Name = "INN_IP_clmn";
-            INN_IP_clmn.ReadOnly = true;
-            INN_IP_clmn.Width = 102;
-            // 
-            // SNILS_clmn
-            // 
-            SNILS_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            SNILS_clmn.HeaderText = "СНИЛС";
-            SNILS_clmn.Name = "SNILS_clmn";
-            SNILS_clmn.ReadOnly = true;
-            SNILS_clmn.Width = 74;
-            // 
             // subjectControl
             // 
             subjectControl.Controls.Add(IP_rb);
@@ -276,6 +228,7 @@
             // 
             // formProgressBar
             // 
+            formProgressBar.ForeColor = SystemColors.Desktop;
             formProgressBar.Location = new Point(7, 518);
             formProgressBar.Name = "formProgressBar";
             formProgressBar.Size = new Size(612, 18);
@@ -697,6 +650,60 @@
             MainTabControl.Size = new Size(636, 571);
             MainTabControl.TabIndex = 5;
             // 
+            // Date_clmn
+            // 
+            Date_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Date_clmn.HeaderText = "Дата";
+            Date_clmn.MinimumWidth = 107;
+            Date_clmn.Name = "Date_clmn";
+            Date_clmn.ReadOnly = true;
+            Date_clmn.Width = 107;
+            // 
+            // CommonName_clmn
+            // 
+            CommonName_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            CommonName_clmn.HeaderText = "Общее имя";
+            CommonName_clmn.MinimumWidth = 141;
+            CommonName_clmn.Name = "CommonName_clmn";
+            CommonName_clmn.ReadOnly = true;
+            CommonName_clmn.Width = 141;
+            // 
+            // INN_UL_clmn
+            // 
+            INN_UL_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            INN_UL_clmn.HeaderText = "ИНН ЮЛ";
+            INN_UL_clmn.MinimumWidth = 82;
+            INN_UL_clmn.Name = "INN_UL_clmn";
+            INN_UL_clmn.ReadOnly = true;
+            INN_UL_clmn.Width = 82;
+            // 
+            // FIO_clmn
+            // 
+            FIO_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            FIO_clmn.HeaderText = "ФИО ИП/ФЛ";
+            FIO_clmn.MinimumWidth = 100;
+            FIO_clmn.Name = "FIO_clmn";
+            FIO_clmn.ReadOnly = true;
+            FIO_clmn.Width = 102;
+            // 
+            // INN_IP_clmn
+            // 
+            INN_IP_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            INN_IP_clmn.HeaderText = "ИНН ИП/ФЛ";
+            INN_IP_clmn.MinimumWidth = 102;
+            INN_IP_clmn.Name = "INN_IP_clmn";
+            INN_IP_clmn.ReadOnly = true;
+            INN_IP_clmn.Width = 102;
+            // 
+            // SNILS_clmn
+            // 
+            SNILS_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SNILS_clmn.HeaderText = "СНИЛС";
+            SNILS_clmn.MinimumWidth = 75;
+            SNILS_clmn.Name = "SNILS_clmn";
+            SNILS_clmn.ReadOnly = true;
+            SNILS_clmn.Width = 75;
+            // 
             // DerjavaTools
             // 
             AccessibleName = "MainForm";
@@ -709,6 +716,7 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
+            MinimumSize = new Size(652, 610);
             Name = "DerjavaTools";
             Text = "Держава TollBox";
             KeyGenTab.ResumeLayout(false);
@@ -773,13 +781,13 @@
         private TabControl MainTabControl;
         private Panel panel1;
         private DataGridView SNILS_DataGridView;
+        private Panel BlockerPanel;
+        private Label BlockerLabel;
         private DataGridViewTextBoxColumn Date_clmn;
         private DataGridViewTextBoxColumn CommonName_clmn;
         private DataGridViewTextBoxColumn INN_UL_clmn;
         private DataGridViewTextBoxColumn FIO_clmn;
         private DataGridViewTextBoxColumn INN_IP_clmn;
         private DataGridViewTextBoxColumn SNILS_clmn;
-        private Panel BlockerPanel;
-        private Label BlockerLabel;
     }
 }
