@@ -8,6 +8,7 @@ namespace WinFormsApp1
         {
             ApplicationConfiguration.Initialize();
             Application.Run(new DerjavaTools());
+
         }
 
     }

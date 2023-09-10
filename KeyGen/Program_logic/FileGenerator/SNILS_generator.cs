@@ -14,6 +14,7 @@ public class SNILS_generator
     protected static string SNILS = null;
     private static List<string> lines = new List<string>();
     protected static string finalResult;
+    private static Dictionary<string, string> IPsDict = new Dictionary<string, string>();
 
 
     private static string GenerateSnils()
@@ -53,6 +54,11 @@ public class SNILS_generator
                     if (!string.IsNullOrEmpty(singleLine))
                     {
                         lines.Add(singleLine);
+                        string[] arrBlock = singleLine.Split("~");
+                        if (!IPsDict.ContainsKey(arrBlock[4]))
+                        {
+                            IPsDict.Add(arrBlock[4], arrBlock[5]);
+                        }
                     }
 
                 }
@@ -91,7 +97,7 @@ public class SNILS_generator
             }
             else if (client.INN_IP.Length == 12 && client.OGRNIP.Length > 0)
             {
-                finalResult = "Инд. предприниматель" + "~" + "Нет данных" + "~" +  FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
+                finalResult = "Инд. предприниматель" + "~" + "Нет данных" + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
 
             if (!lines.Contains(finalResult))
@@ -112,20 +118,14 @@ public class SNILS_generator
 
     public static string setSNILS(string INN_IP)
     {
-
-        foreach (var singleClient in lines)
+        if (IPsDict.ContainsKey(INN_IP))
         {
-            string[] blocks = singleClient.Split("~");
-            if (blocks[4].Equals(INN_IP))
-            {
-                SNILS = blocks[5];
-            }
-            else
-            {
-                SNILS = GenerateSnils();
-            }
+            SNILS = IPsDict[INN_IP];
         }
-
+        else
+        {
+            SNILS = GenerateSnils();
+        }
         return SNILS;
     }
 

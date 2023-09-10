@@ -94,4 +94,30 @@ public class MassPropertyChanger
             }
         }
     }
+    public static void setEnableAll(Control anchorPane)
+    {
+        foreach (Control node in anchorPane.Controls)
+        {
+            if (node is TextBox)
+            {
+                TextBox textField = (TextBox)node;
+
+                switch (textField.Name)
+                {
+
+                    case "SNILS_input":
+                        textField.Enabled = false;
+                        textField.ReadOnly = true;
+                        break;
+                    default:
+                        textField.Enabled = true;
+                        textField.ReadOnly = false;
+                        break;
+                }
+            }
+
+        }
+    }
+
+
 }

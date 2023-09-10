@@ -5,6 +5,9 @@ using WinFormsApp1.KeyGen.API_logic;
 using WinFormsApp1.KeyGen.Program_logic.FileGenerator;
 using WinFormsApp1.KeyGen.Program_logic.POM;
 using WinFormsApp1.KeyGen.Program_logic.Utils;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ProgressBar = System.Windows.Forms.ProgressBar;
+using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace WinFormsApp1
 {
@@ -151,9 +154,11 @@ namespace WinFormsApp1
                 OGRNIP_input.Text = "";
                 OGRNIP_input.PlaceholderText = "Поле не используется в текущем контексте";
                 JobTitle_input.Text = "Физическое лицо";
+
             }
             else if (IP_rb.Checked)
             {
+
                 CommonName_input.Text = subjectInfo[1] + " " + client.Surname + " " + client.NameLastName;
                 OGRNIP_input.Enabled = true;
                 OGRNIP_input.Text = client.OGRNIP;
@@ -168,26 +173,24 @@ namespace WinFormsApp1
             {
                 SNILS_DataGridView.Enabled = false;
                 SNILS_DataGridView.Visible = false;
-                Size = new Size(652, 610);
+                Size = new Size(776, 610);
 
             }
             else
             {
                 SNILS_DataGridView.Enabled = true;
                 SNILS_DataGridView.Visible = true;
-                Size = new Size(652, 850);
+                Size = new Size(776, 850);
 
             }
         }
         private async void registerINN_btn_Click(object sender, EventArgs e)
         {
+            Blocker.createBlocker(this);
             try
             {
                 CancellationTokenSource cts = new CancellationTokenSource();
-                BlockerPanel.Enabled = true;
-                BlockerPanel.Visible = true;
-                BlockerLabel.Enabled = true;
-                BlockerLabel.Visible = true;
+                Blocker.createBlocker(this);
 
 
                 KeyCreationTask keyCreation = new KeyCreationTask(client, subjectInfo);
@@ -198,10 +201,7 @@ namespace WinFormsApp1
                     updateTable(SNILS_generator.checkSNILSwarehouse());
                 }
 
-                BlockerPanel.Enabled = false;
-                BlockerPanel.Visible = false;
-                BlockerLabel.Enabled = false;
-                BlockerLabel.Visible = false;
+                Blocker.deleteBlocker(this);
                 showBrowser_chb.Enabled = false;
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
@@ -218,10 +218,7 @@ namespace WinFormsApp1
             catch (Exception exception)
             {
                 FilesCreator.Log_creator(exception);
-                BlockerPanel.Enabled = false;
-                BlockerPanel.Visible = false;
-                BlockerLabel.Enabled = false;
-                BlockerLabel.Visible = false;
+                Blocker.deleteBlocker(this);
                 showBrowser_chb.Enabled = false;
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
@@ -252,6 +249,38 @@ namespace WinFormsApp1
                 SNILS_DataGridView.Rows.Add(rowData);
             }
 
+        }
+
+        private void SNILS_DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                int rowNumber = e.RowIndex;
+                string value = SNILS_DataGridView.Rows[rowNumber].Cells[4].Value.ToString();
+
+                Clipboard.SetText(value);
+                MessageBoxCreator.craeteMessageBox("ИНН " + value + " был скопирован в буфер обмена", "ИНН ФЛ/ИП", MessageBoxIcon.Information);
+            }
+        }
+
+        private void isManual_Click(object sender, EventArgs e)
+        {
+            if (isManual.Checked)
+            {
+                INN_input.Enabled = false;
+                getINNdata_btn.Enabled = false;
+                client = null;
+                MassPropertyChanger.setDefaultData(InputsPannel);
+                MassPropertyChanger.setEnableAll(InputsPannel);
+            }
+            else
+            {
+                INN_input.Enabled = true;
+                getINNdata_btn.Enabled = true;
+                client = null;
+                MassPropertyChanger.setDefaultData(InputsPannel);
+                MassPropertyChanger.disableAllSubjectControl(InputsPannel);
+            }
         }
     }
 }

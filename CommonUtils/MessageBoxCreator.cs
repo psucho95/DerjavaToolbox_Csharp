@@ -1,4 +1,5 @@
 ﻿namespace WinFormsApp1.CommonUtils;
+using System.Windows.Forms;
 
 public class MessageBoxCreator
 {

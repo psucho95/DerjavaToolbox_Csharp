@@ -30,11 +30,16 @@
         {
             TabPage OtherTools;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DerjavaTools));
+            MainTabControl = new TabControl();
             KeyGenTab = new TabPage();
-            BlockerPanel = new Panel();
-            BlockerLabel = new Label();
             panel1 = new Panel();
             SNILS_DataGridView = new DataGridView();
+            Date_clmn = new DataGridViewTextBoxColumn();
+            CommonName_clmn = new DataGridViewTextBoxColumn();
+            INN_UL_clmn = new DataGridViewTextBoxColumn();
+            FIO_clmn = new DataGridViewTextBoxColumn();
+            INN_IP_clmn = new DataGridViewTextBoxColumn();
+            SNILS_clmn = new DataGridViewTextBoxColumn();
             subjectControl = new Panel();
             IP_rb = new RadioButton();
             UL_rb = new RadioButton();
@@ -77,35 +82,39 @@
             getINNdata_btn = new Button();
             INN_input = new MaskedTextBox();
             INN_label = new Label();
-            MainTabControl = new TabControl();
-            Date_clmn = new DataGridViewTextBoxColumn();
-            CommonName_clmn = new DataGridViewTextBoxColumn();
-            INN_UL_clmn = new DataGridViewTextBoxColumn();
-            FIO_clmn = new DataGridViewTextBoxColumn();
-            INN_IP_clmn = new DataGridViewTextBoxColumn();
-            SNILS_clmn = new DataGridViewTextBoxColumn();
+            isManual = new CheckBox();
             OtherTools = new TabPage();
+            MainTabControl.SuspendLayout();
             KeyGenTab.SuspendLayout();
-            BlockerPanel.SuspendLayout();
             panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SNILS_DataGridView).BeginInit();
             subjectControl.SuspendLayout();
             InputsPannel.SuspendLayout();
-            MainTabControl.SuspendLayout();
             SuspendLayout();
             // 
             // OtherTools
             // 
             OtherTools.Location = new Point(4, 24);
             OtherTools.Name = "OtherTools";
-            OtherTools.Size = new Size(628, 543);
+            OtherTools.Size = new Size(752, 543);
             OtherTools.TabIndex = 2;
             OtherTools.Text = "Другие инструменты";
             OtherTools.UseVisualStyleBackColor = true;
             // 
+            // MainTabControl
+            // 
+            MainTabControl.Controls.Add(KeyGenTab);
+            MainTabControl.Controls.Add(OtherTools);
+            MainTabControl.Dock = DockStyle.Fill;
+            MainTabControl.Location = new Point(0, 0);
+            MainTabControl.Name = "MainTabControl";
+            MainTabControl.SelectedIndex = 0;
+            MainTabControl.Size = new Size(760, 571);
+            MainTabControl.TabIndex = 5;
+            // 
             // KeyGenTab
             // 
-            KeyGenTab.Controls.Add(BlockerPanel);
+            KeyGenTab.Controls.Add(isManual);
             KeyGenTab.Controls.Add(panel1);
             KeyGenTab.Controls.Add(subjectControl);
             KeyGenTab.Controls.Add(formProgressBar);
@@ -121,41 +130,17 @@
             KeyGenTab.Location = new Point(4, 24);
             KeyGenTab.Name = "KeyGenTab";
             KeyGenTab.Padding = new Padding(3);
-            KeyGenTab.Size = new Size(628, 543);
+            KeyGenTab.Size = new Size(752, 543);
             KeyGenTab.TabIndex = 1;
             KeyGenTab.Text = "Создание ключа";
             KeyGenTab.UseVisualStyleBackColor = true;
-            // 
-            // BlockerPanel
-            // 
-            BlockerPanel.AutoSize = true;
-            BlockerPanel.BackColor = Color.Transparent;
-            BlockerPanel.Controls.Add(BlockerLabel);
-            BlockerPanel.Enabled = false;
-            BlockerPanel.Location = new Point(0, 0);
-            BlockerPanel.Name = "BlockerPanel";
-            BlockerPanel.Size = new Size(629, 511);
-            BlockerPanel.TabIndex = 49;
-            BlockerPanel.Visible = false;
-            // 
-            // BlockerLabel
-            // 
-            BlockerLabel.AutoSize = true;
-            BlockerLabel.Enabled = false;
-            BlockerLabel.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point);
-            BlockerLabel.Location = new Point(11, 247);
-            BlockerLabel.Name = "BlockerLabel";
-            BlockerLabel.Size = new Size(600, 32);
-            BlockerLabel.TabIndex = 0;
-            BlockerLabel.Text = "Пожалуйста, подождите, операция выполняется";
-            BlockerLabel.Visible = false;
             // 
             // panel1
             // 
             panel1.Controls.Add(SNILS_DataGridView);
             panel1.Location = new Point(8, 542);
             panel1.Name = "panel1";
-            panel1.Size = new Size(612, 235);
+            panel1.Size = new Size(738, 235);
             panel1.TabIndex = 55;
             // 
             // SNILS_DataGridView
@@ -169,32 +154,92 @@
             SNILS_DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             SNILS_DataGridView.Columns.AddRange(new DataGridViewColumn[] { Date_clmn, CommonName_clmn, INN_UL_clmn, FIO_clmn, INN_IP_clmn, SNILS_clmn });
             SNILS_DataGridView.Enabled = false;
-            SNILS_DataGridView.Location = new Point(0, 0);
+            SNILS_DataGridView.Location = new Point(-1, 0);
             SNILS_DataGridView.MultiSelect = false;
             SNILS_DataGridView.Name = "SNILS_DataGridView";
             SNILS_DataGridView.ReadOnly = true;
             SNILS_DataGridView.RowHeadersVisible = false;
             SNILS_DataGridView.RowTemplate.Height = 25;
             SNILS_DataGridView.SelectionMode = DataGridViewSelectionMode.CellSelect;
-            SNILS_DataGridView.Size = new Size(612, 235);
+            SNILS_DataGridView.ShowCellErrors = false;
+            SNILS_DataGridView.ShowCellToolTips = false;
+            SNILS_DataGridView.ShowEditingIcon = false;
+            SNILS_DataGridView.ShowRowErrors = false;
+            SNILS_DataGridView.Size = new Size(739, 235);
             SNILS_DataGridView.TabIndex = 0;
             SNILS_DataGridView.Visible = false;
+            SNILS_DataGridView.CellClick += SNILS_DataGridView_CellClick;
+            // 
+            // Date_clmn
+            // 
+            Date_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            Date_clmn.HeaderText = "Дата";
+            Date_clmn.MinimumWidth = 107;
+            Date_clmn.Name = "Date_clmn";
+            Date_clmn.ReadOnly = true;
+            Date_clmn.Width = 107;
+            // 
+            // CommonName_clmn
+            // 
+            CommonName_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            CommonName_clmn.HeaderText = "Общее имя";
+            CommonName_clmn.MinimumWidth = 160;
+            CommonName_clmn.Name = "CommonName_clmn";
+            CommonName_clmn.ReadOnly = true;
+            CommonName_clmn.Width = 160;
+            // 
+            // INN_UL_clmn
+            // 
+            INN_UL_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            INN_UL_clmn.HeaderText = "ИНН ЮЛ";
+            INN_UL_clmn.MinimumWidth = 82;
+            INN_UL_clmn.Name = "INN_UL_clmn";
+            INN_UL_clmn.ReadOnly = true;
+            INN_UL_clmn.Width = 82;
+            // 
+            // FIO_clmn
+            // 
+            FIO_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            FIO_clmn.HeaderText = "ФИО ИП/ФЛ";
+            FIO_clmn.MinimumWidth = 160;
+            FIO_clmn.Name = "FIO_clmn";
+            FIO_clmn.ReadOnly = true;
+            FIO_clmn.Width = 160;
+            // 
+            // INN_IP_clmn
+            // 
+            INN_IP_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            INN_IP_clmn.HeaderText = "ИНН ИП/ФЛ";
+            INN_IP_clmn.MinimumWidth = 102;
+            INN_IP_clmn.Name = "INN_IP_clmn";
+            INN_IP_clmn.ReadOnly = true;
+            INN_IP_clmn.ToolTipText = "Нажмите, чтобы скопировать значение в буфер обмена";
+            INN_IP_clmn.Width = 102;
+            // 
+            // SNILS_clmn
+            // 
+            SNILS_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SNILS_clmn.HeaderText = "СНИЛС";
+            SNILS_clmn.MinimumWidth = 75;
+            SNILS_clmn.Name = "SNILS_clmn";
+            SNILS_clmn.ReadOnly = true;
+            SNILS_clmn.Width = 75;
             // 
             // subjectControl
             // 
             subjectControl.Controls.Add(IP_rb);
             subjectControl.Controls.Add(UL_rb);
             subjectControl.Controls.Add(FL_rb);
-            subjectControl.Location = new Point(8, 64);
+            subjectControl.Location = new Point(7, 61);
             subjectControl.Name = "subjectControl";
-            subjectControl.Size = new Size(597, 19);
+            subjectControl.Size = new Size(737, 19);
             subjectControl.TabIndex = 54;
             // 
             // IP_rb
             // 
             IP_rb.AutoSize = true;
             IP_rb.Enabled = false;
-            IP_rb.Location = new Point(376, 0);
+            IP_rb.Location = new Point(510, 0);
             IP_rb.Name = "IP_rb";
             IP_rb.Size = new Size(224, 19);
             IP_rb.TabIndex = 53;
@@ -206,7 +251,7 @@
             // 
             UL_rb.AutoSize = true;
             UL_rb.Enabled = false;
-            UL_rb.Location = new Point(3, 0);
+            UL_rb.Location = new Point(102, 0);
             UL_rb.Name = "UL_rb";
             UL_rb.Size = new Size(133, 19);
             UL_rb.TabIndex = 51;
@@ -218,7 +263,7 @@
             // 
             FL_rb.AutoSize = true;
             FL_rb.Enabled = false;
-            FL_rb.Location = new Point(197, 0);
+            FL_rb.Location = new Point(313, 0);
             FL_rb.Name = "FL_rb";
             FL_rb.Size = new Size(122, 19);
             FL_rb.TabIndex = 52;
@@ -231,7 +276,7 @@
             formProgressBar.ForeColor = SystemColors.Desktop;
             formProgressBar.Location = new Point(7, 518);
             formProgressBar.Name = "formProgressBar";
-            formProgressBar.Size = new Size(612, 18);
+            formProgressBar.Size = new Size(739, 18);
             formProgressBar.TabIndex = 50;
             // 
             // InputsPannel
@@ -266,7 +311,7 @@
             InputsPannel.Controls.Add(NameLastName_label);
             InputsPannel.Location = new Point(7, 88);
             InputsPannel.Name = "InputsPannel";
-            InputsPannel.Size = new Size(612, 423);
+            InputsPannel.Size = new Size(749, 423);
             InputsPannel.TabIndex = 49;
             // 
             // CommonName_label
@@ -286,7 +331,7 @@
             OGRNIP_input.Name = "OGRNIP_input";
             OGRNIP_input.PlaceholderText = "ОГРНИП ИП";
             OGRNIP_input.ReadOnly = true;
-            OGRNIP_input.Size = new Size(507, 22);
+            OGRNIP_input.Size = new Size(637, 22);
             OGRNIP_input.TabIndex = 48;
             // 
             // OGRN_label
@@ -306,7 +351,7 @@
             INN_IP_Input.Name = "INN_IP_Input";
             INN_IP_Input.PlaceholderText = "ИНН ИП, ФЛ или ЕИО предприятия";
             INN_IP_Input.ReadOnly = true;
-            INN_IP_Input.Size = new Size(507, 22);
+            INN_IP_Input.Size = new Size(637, 22);
             INN_IP_Input.TabIndex = 46;
             // 
             // JobTitle_label
@@ -326,7 +371,7 @@
             INN_UL_input.Name = "INN_UL_input";
             INN_UL_input.PlaceholderText = "ИНН предприятия";
             INN_UL_input.ReadOnly = true;
-            INN_UL_input.Size = new Size(507, 22);
+            INN_UL_input.Size = new Size(637, 22);
             INN_UL_input.TabIndex = 34;
             // 
             // SNILS_label
@@ -346,7 +391,7 @@
             SNILS_input.Name = "SNILS_input";
             SNILS_input.PlaceholderText = "Номер СНИЛС. Генерируется автоматически";
             SNILS_input.ReadOnly = true;
-            SNILS_input.Size = new Size(507, 22);
+            SNILS_input.Size = new Size(637, 22);
             SNILS_input.TabIndex = 32;
             // 
             // Subdivision_label
@@ -366,7 +411,7 @@
             OGRN_input.Name = "OGRN_input";
             OGRN_input.PlaceholderText = "Номер ОГРН предприятия";
             OGRN_input.ReadOnly = true;
-            OGRN_input.Size = new Size(507, 22);
+            OGRN_input.Size = new Size(637, 22);
             OGRN_input.TabIndex = 30;
             // 
             // INN_UL_label
@@ -386,7 +431,7 @@
             JobTitle_input.Name = "JobTitle_input";
             JobTitle_input.PlaceholderText = "Должность ИП, ФЛ или владельца ключа в предприятии";
             JobTitle_input.ReadOnly = true;
-            JobTitle_input.Size = new Size(507, 22);
+            JobTitle_input.Size = new Size(637, 22);
             JobTitle_input.TabIndex = 28;
             // 
             // OrgName_label
@@ -406,7 +451,7 @@
             Subdivision_input.Name = "Subdivision_input";
             Subdivision_input.PlaceholderText = "Статический параметр \"Онлайн\"";
             Subdivision_input.ReadOnly = true;
-            Subdivision_input.Size = new Size(507, 22);
+            Subdivision_input.Size = new Size(637, 22);
             Subdivision_input.TabIndex = 26;
             // 
             // INN_IP_Label
@@ -426,7 +471,7 @@
             OrgName_input.Name = "OrgName_input";
             OrgName_input.PlaceholderText = "Полное наименование предприятия, ИП или ФЛ";
             OrgName_input.ReadOnly = true;
-            OrgName_input.Size = new Size(507, 22);
+            OrgName_input.Size = new Size(637, 22);
             OrgName_input.TabIndex = 24;
             // 
             // Region_label
@@ -446,7 +491,7 @@
             Region_input.Name = "Region_input";
             Region_input.PlaceholderText = "Область регистрации предприятия, ИП или ФЛ";
             Region_input.ReadOnly = true;
-            Region_input.Size = new Size(507, 22);
+            Region_input.Size = new Size(637, 22);
             Region_input.TabIndex = 22;
             // 
             // OGRNIP_label
@@ -466,7 +511,7 @@
             City_input.Name = "City_input";
             City_input.PlaceholderText = "Город регистрации предприятия, ИП или ФЛ";
             City_input.ReadOnly = true;
-            City_input.Size = new Size(507, 22);
+            City_input.Size = new Size(637, 22);
             City_input.TabIndex = 20;
             // 
             // City_label
@@ -485,7 +530,7 @@
             CommonName_input.Name = "CommonName_input";
             CommonName_input.PlaceholderText = "Сокращенное наименование предприятия, ИП или ФЛ";
             CommonName_input.ReadOnly = true;
-            CommonName_input.Size = new Size(507, 22);
+            CommonName_input.Size = new Size(637, 22);
             CommonName_input.TabIndex = 12;
             // 
             // FullAdress_input
@@ -496,7 +541,7 @@
             FullAdress_input.Name = "FullAdress_input";
             FullAdress_input.PlaceholderText = "Полный адрес регистрации предприятия, ИП или ФЛ";
             FullAdress_input.ReadOnly = true;
-            FullAdress_input.Size = new Size(507, 22);
+            FullAdress_input.Size = new Size(637, 22);
             FullAdress_input.TabIndex = 18;
             // 
             // FullAdress_label
@@ -525,7 +570,7 @@
             Surname_input.Name = "Surname_input";
             Surname_input.PlaceholderText = "Фамилия ИП, ФЛ или ЕИО предприятия";
             Surname_input.ReadOnly = true;
-            Surname_input.Size = new Size(507, 22);
+            Surname_input.Size = new Size(637, 22);
             Surname_input.TabIndex = 14;
             // 
             // NameLastName_input
@@ -536,7 +581,7 @@
             NameLastName_input.Name = "NameLastName_input";
             NameLastName_input.PlaceholderText = "Имя и Отчество ИП, ФЛ или ЕИО предприятия";
             NameLastName_input.ReadOnly = true;
-            NameLastName_input.Size = new Size(507, 22);
+            NameLastName_input.Size = new Size(637, 22);
             NameLastName_input.TabIndex = 16;
             // 
             // NameLastName_label
@@ -552,7 +597,7 @@
             // 
             httpFix_chb.AutoSize = true;
             httpFix_chb.Enabled = false;
-            httpFix_chb.Location = new Point(414, 9);
+            httpFix_chb.Location = new Point(548, 37);
             httpFix_chb.Name = "httpFix_chb";
             httpFix_chb.Size = new Size(134, 19);
             httpFix_chb.TabIndex = 13;
@@ -563,7 +608,7 @@
             // createHistory_chb
             // 
             createHistory_chb.AutoSize = true;
-            createHistory_chb.Location = new Point(414, 38);
+            createHistory_chb.Location = new Point(423, 37);
             createHistory_chb.Name = "createHistory_chb";
             createHistory_chb.Size = new Size(119, 19);
             createHistory_chb.TabIndex = 12;
@@ -574,7 +619,7 @@
             // downloadEGR_btn
             // 
             downloadEGR_btn.Enabled = false;
-            downloadEGR_btn.Location = new Point(135, 35);
+            downloadEGR_btn.Location = new Point(133, 33);
             downloadEGR_btn.Name = "downloadEGR_btn";
             downloadEGR_btn.Size = new Size(127, 23);
             downloadEGR_btn.TabIndex = 11;
@@ -586,7 +631,7 @@
             // 
             showBrowser_chb.AutoSize = true;
             showBrowser_chb.Enabled = false;
-            showBrowser_chb.Location = new Point(268, 38);
+            showBrowser_chb.Location = new Point(277, 37);
             showBrowser_chb.Name = "showBrowser_chb";
             showBrowser_chb.Size = new Size(140, 19);
             showBrowser_chb.TabIndex = 8;
@@ -597,7 +642,7 @@
             // registerINN_btn
             // 
             registerINN_btn.Enabled = false;
-            registerINN_btn.Location = new Point(8, 35);
+            registerINN_btn.Location = new Point(6, 33);
             registerINN_btn.Name = "registerINN_btn";
             registerINN_btn.Size = new Size(121, 23);
             registerINN_btn.TabIndex = 4;
@@ -608,7 +653,7 @@
             // getINNdata_btn
             // 
             getINNdata_btn.Enabled = false;
-            getINNdata_btn.Location = new Point(268, 5);
+            getINNdata_btn.Location = new Point(453, 5);
             getINNdata_btn.Name = "getINNdata_btn";
             getINNdata_btn.Size = new Size(140, 23);
             getINNdata_btn.TabIndex = 3;
@@ -624,7 +669,7 @@
             INN_input.Mask = "000000000000";
             INN_input.Name = "INN_input";
             INN_input.PromptChar = ' ';
-            INN_input.Size = new Size(165, 23);
+            INN_input.Size = new Size(350, 23);
             INN_input.TabIndex = 2;
             INN_input.TextMaskFormat = MaskFormat.ExcludePromptAndLiterals;
             INN_input.Click += INN_input_Click;
@@ -639,70 +684,16 @@
             INN_label.TabIndex = 0;
             INN_label.Text = "Введите ИНН";
             // 
-            // MainTabControl
+            // isManual
             // 
-            MainTabControl.Controls.Add(KeyGenTab);
-            MainTabControl.Controls.Add(OtherTools);
-            MainTabControl.Dock = DockStyle.Fill;
-            MainTabControl.Location = new Point(0, 0);
-            MainTabControl.Name = "MainTabControl";
-            MainTabControl.SelectedIndex = 0;
-            MainTabControl.Size = new Size(636, 571);
-            MainTabControl.TabIndex = 5;
-            // 
-            // Date_clmn
-            // 
-            Date_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            Date_clmn.HeaderText = "Дата";
-            Date_clmn.MinimumWidth = 107;
-            Date_clmn.Name = "Date_clmn";
-            Date_clmn.ReadOnly = true;
-            Date_clmn.Width = 107;
-            // 
-            // CommonName_clmn
-            // 
-            CommonName_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            CommonName_clmn.HeaderText = "Общее имя";
-            CommonName_clmn.MinimumWidth = 141;
-            CommonName_clmn.Name = "CommonName_clmn";
-            CommonName_clmn.ReadOnly = true;
-            CommonName_clmn.Width = 141;
-            // 
-            // INN_UL_clmn
-            // 
-            INN_UL_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            INN_UL_clmn.HeaderText = "ИНН ЮЛ";
-            INN_UL_clmn.MinimumWidth = 82;
-            INN_UL_clmn.Name = "INN_UL_clmn";
-            INN_UL_clmn.ReadOnly = true;
-            INN_UL_clmn.Width = 82;
-            // 
-            // FIO_clmn
-            // 
-            FIO_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-            FIO_clmn.HeaderText = "ФИО ИП/ФЛ";
-            FIO_clmn.MinimumWidth = 100;
-            FIO_clmn.Name = "FIO_clmn";
-            FIO_clmn.ReadOnly = true;
-            FIO_clmn.Width = 102;
-            // 
-            // INN_IP_clmn
-            // 
-            INN_IP_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            INN_IP_clmn.HeaderText = "ИНН ИП/ФЛ";
-            INN_IP_clmn.MinimumWidth = 102;
-            INN_IP_clmn.Name = "INN_IP_clmn";
-            INN_IP_clmn.ReadOnly = true;
-            INN_IP_clmn.Width = 102;
-            // 
-            // SNILS_clmn
-            // 
-            SNILS_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-            SNILS_clmn.HeaderText = "СНИЛС";
-            SNILS_clmn.MinimumWidth = 75;
-            SNILS_clmn.Name = "SNILS_clmn";
-            SNILS_clmn.ReadOnly = true;
-            SNILS_clmn.Width = 75;
+            isManual.AutoSize = true;
+            isManual.Location = new Point(599, 8);
+            isManual.Name = "isManual";
+            isManual.Size = new Size(134, 19);
+            isManual.TabIndex = 56;
+            isManual.Text = "Ручное заполнение";
+            isManual.UseVisualStyleBackColor = true;
+            isManual.Click += isManual_Click;
             // 
             // DerjavaTools
             // 
@@ -711,33 +702,33 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(636, 571);
+            ClientSize = new Size(760, 571);
             Controls.Add(MainTabControl);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
-            MinimumSize = new Size(652, 610);
+            MinimumSize = new Size(776, 610);
             Name = "DerjavaTools";
             Text = "Держава TollBox";
+            MainTabControl.ResumeLayout(false);
             KeyGenTab.ResumeLayout(false);
             KeyGenTab.PerformLayout();
-            BlockerPanel.ResumeLayout(false);
-            BlockerPanel.PerformLayout();
             panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)SNILS_DataGridView).EndInit();
             subjectControl.ResumeLayout(false);
             subjectControl.PerformLayout();
             InputsPannel.ResumeLayout(false);
             InputsPannel.PerformLayout();
-            MainTabControl.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-
+        private TabControl MainTabControl;
         protected TabPage KeyGenTab;
-        private Panel subjectControl;
         private RadioButton IP_rb;
+        private Panel panel1;
+        private DataGridView SNILS_DataGridView;
+        private Panel subjectControl;
         private RadioButton UL_rb;
         private RadioButton FL_rb;
         private ProgressBar formProgressBar;
@@ -778,16 +769,12 @@
         private Button getINNdata_btn;
         private MaskedTextBox INN_input;
         private Label INN_label;
-        private TabControl MainTabControl;
-        private Panel panel1;
-        private DataGridView SNILS_DataGridView;
-        private Panel BlockerPanel;
-        private Label BlockerLabel;
         private DataGridViewTextBoxColumn Date_clmn;
         private DataGridViewTextBoxColumn CommonName_clmn;
         private DataGridViewTextBoxColumn INN_UL_clmn;
         private DataGridViewTextBoxColumn FIO_clmn;
         private DataGridViewTextBoxColumn INN_IP_clmn;
         private DataGridViewTextBoxColumn SNILS_clmn;
+        private CheckBox isManual;
     }
 }
