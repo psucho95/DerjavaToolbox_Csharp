@@ -10,6 +10,9 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ProgressBar = System.Windows.Forms.ProgressBar;
 using ToolTip = System.Windows.Forms.ToolTip;
 using System.Text.RegularExpressions;
+using static WinFormsApp1.KeyGen.StaticData.StaticData;
+using System.Diagnostics;
+using System.IO;
 
 namespace WinFormsApp1
 {
@@ -47,7 +50,7 @@ namespace WinFormsApp1
         {
 
             FilesCreator.saveSysIdAsync(INN_input.Text);
-            switch (INN_UL_input.Text.Length)
+            switch (INN_input.Text.Length)
             {
                 case 12: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_IP_Input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
                 case 10: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_UL_input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
@@ -479,8 +482,31 @@ namespace WinFormsApp1
             }
             else
             {
-                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length >1) registerINN_btn.Enabled = true;
+                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
             }
+        }
+
+        private void Logs_btn_Click(object sender, EventArgs e)
+        {
+            string dir = rootDirectory + logFolderPath;
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            Process.Start("explorer.exe", dir);
+
+        }
+
+        private void SysIdInfo_btn_Click(object sender, EventArgs e)
+        {
+            string dir = rootDirectory + sysIdInfosFolderPath;
+
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            Process.Start("explorer.exe", dir);
         }
     }
 }

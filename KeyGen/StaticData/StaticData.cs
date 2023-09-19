@@ -20,6 +20,5 @@ public static class StaticData
    public static string cspX32 = rootDirectory + "C:\\Program Files (x86)\\Crypto Pro\\CSP\\cpanel.cpl";
    public static string cspPluginX64 = rootDirectory + "C:\\Program Files\\Crypto Pro\\CAdES Browser Plug-in\\config.html";
    public static string cspPluginX32 = rootDirectory + "C:\\Program Files (x86)\\Crypto Pro\\CAdES Browser Plug-in\\config.html";
-   public static string SysIdPath = rootDirectory + "SystemIdInfos/";
    public static string rootKeyThumbPrint = "18F7C1FCC3090203FD5BAA2F861A754976C8DD25";
 }

@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DerjavaTools));
             KeyGenTab = new TabPage();
+            SysIdInfo_btn = new Button();
+            Logs_btn = new Button();
             ManualEditing_panel = new Panel();
             Manual_JobTitle_chb = new CheckBox();
             Manual_NameLastName_chb = new CheckBox();
@@ -97,6 +99,8 @@
             // 
             // KeyGenTab
             // 
+            KeyGenTab.Controls.Add(SysIdInfo_btn);
+            KeyGenTab.Controls.Add(Logs_btn);
             KeyGenTab.Controls.Add(ManualEditing_panel);
             KeyGenTab.Controls.Add(SNILS_DataGridView);
             KeyGenTab.Controls.Add(subjectControl);
@@ -118,6 +122,26 @@
             KeyGenTab.Text = "Создание ключа";
             KeyGenTab.UseVisualStyleBackColor = true;
             // 
+            // SysIdInfo_btn
+            // 
+            SysIdInfo_btn.Location = new Point(633, 33);
+            SysIdInfo_btn.Name = "SysIdInfo_btn";
+            SysIdInfo_btn.Size = new Size(113, 23);
+            SysIdInfo_btn.TabIndex = 64;
+            SysIdInfo_btn.Text = "Открыть выписки";
+            SysIdInfo_btn.UseVisualStyleBackColor = true;
+            SysIdInfo_btn.Click += SysIdInfo_btn_Click;
+            // 
+            // Logs_btn
+            // 
+            Logs_btn.Location = new Point(633, 6);
+            Logs_btn.Name = "Logs_btn";
+            Logs_btn.Size = new Size(113, 23);
+            Logs_btn.TabIndex = 63;
+            Logs_btn.Text = "Открыть логи";
+            Logs_btn.UseVisualStyleBackColor = true;
+            Logs_btn.Click += Logs_btn_Click;
+            // 
             // ManualEditing_panel
             // 
             ManualEditing_panel.Controls.Add(Manual_JobTitle_chb);
@@ -125,7 +149,7 @@
             ManualEditing_panel.Controls.Add(Manual_Surname_chb);
             ManualEditing_panel.Controls.Add(Manual_SNILS_chb);
             ManualEditing_panel.Controls.Add(Manual_INN_FL_chb);
-            ManualEditing_panel.Location = new Point(749, 88);
+            ManualEditing_panel.Location = new Point(749, 75);
             ManualEditing_panel.Name = "ManualEditing_panel";
             ManualEditing_panel.Size = new Size(22, 423);
             ManualEditing_panel.TabIndex = 62;
@@ -271,16 +295,16 @@
             subjectControl.Controls.Add(IP_rb);
             subjectControl.Controls.Add(UL_rb);
             subjectControl.Controls.Add(FL_rb);
-            subjectControl.Location = new Point(7, 63);
+            subjectControl.Location = new Point(109, 62);
             subjectControl.Name = "subjectControl";
-            subjectControl.Size = new Size(737, 19);
+            subjectControl.Size = new Size(496, 19);
             subjectControl.TabIndex = 54;
             // 
             // IP_rb
             // 
             IP_rb.AutoSize = true;
             IP_rb.Enabled = false;
-            IP_rb.Location = new Point(510, 0);
+            IP_rb.Location = new Point(267, 0);
             IP_rb.Name = "IP_rb";
             IP_rb.Size = new Size(224, 19);
             IP_rb.TabIndex = 53;
@@ -292,7 +316,7 @@
             // 
             UL_rb.AutoSize = true;
             UL_rb.Enabled = false;
-            UL_rb.Location = new Point(102, 0);
+            UL_rb.Location = new Point(0, 0);
             UL_rb.Name = "UL_rb";
             UL_rb.Size = new Size(133, 19);
             UL_rb.TabIndex = 51;
@@ -304,7 +328,7 @@
             // 
             FL_rb.AutoSize = true;
             FL_rb.Enabled = false;
-            FL_rb.Location = new Point(313, 0);
+            FL_rb.Location = new Point(139, -2);
             FL_rb.Name = "FL_rb";
             FL_rb.Size = new Size(122, 19);
             FL_rb.TabIndex = 52;
@@ -315,7 +339,7 @@
             // formProgressBar
             // 
             formProgressBar.ForeColor = SystemColors.Desktop;
-            formProgressBar.Location = new Point(7, 518);
+            formProgressBar.Location = new Point(7, 505);
             formProgressBar.Name = "formProgressBar";
             formProgressBar.Size = new Size(760, 18);
             formProgressBar.TabIndex = 50;
@@ -351,7 +375,7 @@
             InputsPannel.Controls.Add(Surname_input);
             InputsPannel.Controls.Add(NameLastName_input);
             InputsPannel.Controls.Add(NameLastName_label);
-            InputsPannel.Location = new Point(7, 88);
+            InputsPannel.Location = new Point(7, 75);
             InputsPannel.Name = "InputsPannel";
             InputsPannel.Size = new Size(739, 423);
             InputsPannel.TabIndex = 49;
@@ -661,18 +685,18 @@
             // 
             httpFix_chb.AutoSize = true;
             httpFix_chb.Enabled = false;
-            httpFix_chb.Location = new Point(548, 37);
+            httpFix_chb.Location = new Point(519, 36);
             httpFix_chb.Name = "httpFix_chb";
-            httpFix_chb.Size = new Size(134, 19);
+            httpFix_chb.Size = new Size(85, 19);
             httpFix_chb.TabIndex = 13;
-            httpFix_chb.Text = "Использовать HTTP";
+            httpFix_chb.Text = "HTTP фикс";
             httpFix_chb.UseVisualStyleBackColor = true;
             httpFix_chb.CheckedChanged += httpFix_chb_CheckedChanged;
             // 
             // createHistory_chb
             // 
             createHistory_chb.AutoSize = true;
-            createHistory_chb.Location = new Point(423, 37);
+            createHistory_chb.Location = new Point(394, 36);
             createHistory_chb.Name = "createHistory_chb";
             createHistory_chb.Size = new Size(119, 19);
             createHistory_chb.TabIndex = 12;
@@ -685,7 +709,7 @@
             downloadEGR_btn.Enabled = false;
             downloadEGR_btn.Location = new Point(133, 33);
             downloadEGR_btn.Name = "downloadEGR_btn";
-            downloadEGR_btn.Size = new Size(127, 23);
+            downloadEGR_btn.Size = new Size(109, 23);
             downloadEGR_btn.TabIndex = 11;
             downloadEGR_btn.Text = "Скачать выписку";
             downloadEGR_btn.UseVisualStyleBackColor = true;
@@ -695,7 +719,7 @@
             // 
             showBrowser_chb.AutoSize = true;
             showBrowser_chb.Enabled = false;
-            showBrowser_chb.Location = new Point(277, 37);
+            showBrowser_chb.Location = new Point(248, 36);
             showBrowser_chb.Name = "showBrowser_chb";
             showBrowser_chb.Size = new Size(140, 19);
             showBrowser_chb.TabIndex = 8;
@@ -719,7 +743,7 @@
             getINNdata_btn.Enabled = false;
             getINNdata_btn.Location = new Point(453, 5);
             getINNdata_btn.Name = "getINNdata_btn";
-            getINNdata_btn.Size = new Size(140, 23);
+            getINNdata_btn.Size = new Size(147, 23);
             getINNdata_btn.TabIndex = 3;
             getINNdata_btn.Text = "Получить данные";
             getINNdata_btn.UseVisualStyleBackColor = true;
@@ -846,5 +870,7 @@
         private MaskedTextBox INN_input;
         private Label INN_label;
         private TabControl MainTabControl;
+        private Button SysIdInfo_btn;
+        private Button Logs_btn;
     }
 }

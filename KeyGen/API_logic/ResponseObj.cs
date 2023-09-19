@@ -41,7 +41,7 @@ public class ResponseObj
         catch (Exception exception)
         {
             //OutputFilesCreator.Log_creator(exception);
-            throw; 
+            throw;
         }
 
         return daDataResponse;
@@ -56,17 +56,25 @@ public class ResponseObj
             xmlResponse = new XmlDocument();
             xmlResponse.Load(SysIdURL);
 
+
             string startTag = "<fin>";
             string endTag = "</fin>";
-            int startIndex = xmlResponse.InnerXml.IndexOf(startTag);
-            int endIndex = xmlResponse.InnerXml.IndexOf(endTag);
-            XDocument sysIdAsPretty = XDocument.Parse(xmlResponse.InnerXml.Remove(startIndex, endIndex - startIndex + endTag.Length));
-            SysId = sysIdAsPretty.ToString();
-            
+            try
+            {
+                int startIndex = xmlResponse.InnerXml.IndexOf(startTag);
+                int endIndex = xmlResponse.InnerXml.IndexOf(endTag);
+                XDocument sysIdAsPretty = XDocument.Parse(xmlResponse.InnerXml.Remove(startIndex, endIndex - startIndex + endTag.Length));
+                SysId = sysIdAsPretty.ToString();
+            }
+            catch (Exception exception)
+            {
+                XDocument sysIdAsPretty = XDocument.Parse(xmlResponse.InnerXml);
+                SysId = sysIdAsPretty.ToString();
+            }
+
         }
         catch (Exception exception)
         {
-            //OutputFilesCreator.Log_creator(exception);
             throw;
         }
         return SysId;
