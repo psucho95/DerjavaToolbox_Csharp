@@ -118,6 +118,30 @@ public class MassPropertyChanger
 
         }
     }
+    public static void unbockManual(Control anchorPane, bool Enabled)
+    {
+        foreach (Control node in anchorPane.Controls)
+        {
+            if (node is CheckBox)
+            {
+                CheckBox checkBox = (CheckBox)node;
+                checkBox.Enabled = true;
+            }
 
+        }
+    }
+
+    public static void uncheckManual(Control anchorPane)
+    {
+        foreach (Control node in anchorPane.Controls)
+        {
+            if (node is CheckBox)
+            {
+                CheckBox checkBox = (CheckBox)node;
+                checkBox.Checked = false;
+            }
+
+        }
+    }
 
 }

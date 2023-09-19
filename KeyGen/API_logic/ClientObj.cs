@@ -198,7 +198,7 @@ public class ClientObj
             if (INN_IP == null || INN_IP.Equals(""))
             {
                Exception noINN_IP_ex = new Exception();
-                throw noINN_IP_ex;
+               throw noINN_IP_ex;
             }
             else
             {
@@ -226,5 +226,4 @@ public class ClientObj
             throw;
         }
     }
-
 }

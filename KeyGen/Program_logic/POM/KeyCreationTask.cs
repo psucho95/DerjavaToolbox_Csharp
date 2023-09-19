@@ -17,7 +17,7 @@ public class KeyCreationTask
     private string[] subjectData;
     private ClientObj client;
     private IWebDriver threadDriver;
-    private bool isCompleteData;
+    private bool isCompleteData = false;
     private RegisterPage registerPage;
     AuthPage authPage;
     PersonalCabinet personalCabinet;
@@ -30,15 +30,14 @@ public class KeyCreationTask
         this.client = client;
     }
 
-    public async Task runKeyTask(CancellationToken cancellationToken)
+    public async Task runKeyTask()
     {
         try
         {
+
             registerPage = new RegisterPage(Main_ProgressBar);
             threadDriver = registerPage.getWebDriver();
             registerPage.FillForm(client, subjectData, client.SubjectINN);
-
-
             registerPage.GetRegister();
 
             authPage = new AuthPage(registerPage);
@@ -49,6 +48,7 @@ public class KeyCreationTask
             threadDriver.Quit();
 
             isCompleteData = true;
+
         }
 
         catch (Exception exception)
@@ -56,7 +56,6 @@ public class KeyCreationTask
             threadDriver.Quit();
             isCompleteData = false;
             throw;
-
         }
     }
 

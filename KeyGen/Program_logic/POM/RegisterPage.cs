@@ -44,7 +44,7 @@ public class RegisterPage : BasePage
     public RegisterPage(ProgressBar progressBar)
     {
         mainPageDriver = getWebDriver();
-        this.progressBar = progressBar;
+        this.progressBar = new ProgressBar();
     }
     public IWebDriver getMainPageDriver()
     {
@@ -74,11 +74,8 @@ public class RegisterPage : BasePage
     {
         try
         {
-
-
             if (INN_from_input.Length == 10 && subjectState[0].Equals("UL"))
             {
-
                 mainPageDriver.FindElement(commonName).SendKeys(Client.CommonName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
@@ -109,10 +106,7 @@ public class RegisterPage : BasePage
 
             else if (INN_from_input.Length == 12 && subjectState[0].Equals("IP"))
             {
-
-
-                mainPageDriver.FindElement(commonName)
-                    .SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
+                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
                 progressBar.Value = 3;
@@ -132,9 +126,7 @@ public class RegisterPage : BasePage
             else if (INN_from_input.Length == 12 && subjectState[0].Equals("FL"))
             {
 
-
-                mainPageDriver.FindElement(commonName)
-                    .SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
+                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
                 progressBar.Value = 3;
@@ -156,23 +148,37 @@ public class RegisterPage : BasePage
     }
 
     public void GetRegister()
+    {
+        try
         {
-            try
-            {
 
-                IWebElement loginField = mainPageDriver.FindElement(login);
-                ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(By.Id("credentials")));
-                loginString = getLogin();
-                loginField.Click();
-                loginField.SendKeys(loginString);
-                IWebElement pwdForm = mainPageDriver.FindElement(password);
-                pwdForm.Click();
-                passwordString = pwdForm.GetAttribute("value");
-                ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(registrBTN));
-                mainPageDriver.FindElement(registrBTN).Click();
-            }
-            catch (Exception exception)
+            IWebElement loginField = mainPageDriver.FindElement(login);
+            ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(By.Id("credentials")));
+            loginString = getLogin();
+            loginField.Click();
+            loginField.SendKeys(loginString);
+            IWebElement pwdForm = mainPageDriver.FindElement(password);
+            pwdForm.Click();
+            passwordString = pwdForm.GetAttribute("value");
+            ((IJavaScriptExecutor)mainPageDriver).ExecuteScript("arguments[0].scrollIntoView();", mainPageDriver.FindElement(registrBTN));
+            mainPageDriver.FindElement(registrBTN).Click();
+
+            Thread.Sleep(1000);
+            if (!mainPageDriver.Url.Contains("RegRequestSuccessful"))
             {
+                if (mainPageDriver.FindElement(ErrorMessageEl).Text == "Ошибка: Пользователь или запрос уже существует.")
+                {
+                    throw new Exception("Ключ с указанным ИНН был создан ранее. Пожалуйста, укажите другой ИНН!");
+                }
+                 if (mainPageDriver.FindElement(ErrorMessageEl).Text == "Ошибка: Этот логин уже используется.")
+                {
+                    throw new Exception("Введённый логин уже используется, пожалуйста, используейте другой логин!");
+                }
             }
         }
+        catch (Exception exception)
+        {
+            throw;
+        }
     }
+}

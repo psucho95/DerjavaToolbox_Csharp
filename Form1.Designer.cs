@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            TabPage OtherTools;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DerjavaTools));
-            MainTabControl = new TabControl();
             KeyGenTab = new TabPage();
-            panel1 = new Panel();
+            ManualEditing_panel = new Panel();
+            Manual_JobTitle_chb = new CheckBox();
+            Manual_NameLastName_chb = new CheckBox();
+            Manual_Surname_chb = new CheckBox();
+            Manual_SNILS_chb = new CheckBox();
+            Manual_INN_FL_chb = new CheckBox();
             SNILS_DataGridView = new DataGridView();
             Date_clmn = new DataGridViewTextBoxColumn();
             CommonName_clmn = new DataGridViewTextBoxColumn();
@@ -46,6 +49,7 @@
             FL_rb = new RadioButton();
             formProgressBar = new ProgressBar();
             InputsPannel = new Panel();
+            isINN_Fl_Exist = new Label();
             CommonName_label = new Label();
             OGRNIP_input = new TextBox();
             OGRN_label = new Label();
@@ -82,40 +86,19 @@
             getINNdata_btn = new Button();
             INN_input = new MaskedTextBox();
             INN_label = new Label();
-            isManual = new CheckBox();
-            OtherTools = new TabPage();
-            MainTabControl.SuspendLayout();
+            MainTabControl = new TabControl();
             KeyGenTab.SuspendLayout();
-            panel1.SuspendLayout();
+            ManualEditing_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SNILS_DataGridView).BeginInit();
             subjectControl.SuspendLayout();
             InputsPannel.SuspendLayout();
+            MainTabControl.SuspendLayout();
             SuspendLayout();
-            // 
-            // OtherTools
-            // 
-            OtherTools.Location = new Point(4, 24);
-            OtherTools.Name = "OtherTools";
-            OtherTools.Size = new Size(752, 543);
-            OtherTools.TabIndex = 2;
-            OtherTools.Text = "Другие инструменты";
-            OtherTools.UseVisualStyleBackColor = true;
-            // 
-            // MainTabControl
-            // 
-            MainTabControl.Controls.Add(KeyGenTab);
-            MainTabControl.Controls.Add(OtherTools);
-            MainTabControl.Dock = DockStyle.Fill;
-            MainTabControl.Location = new Point(0, 0);
-            MainTabControl.Name = "MainTabControl";
-            MainTabControl.SelectedIndex = 0;
-            MainTabControl.Size = new Size(760, 571);
-            MainTabControl.TabIndex = 5;
             // 
             // KeyGenTab
             // 
-            KeyGenTab.Controls.Add(isManual);
-            KeyGenTab.Controls.Add(panel1);
+            KeyGenTab.Controls.Add(ManualEditing_panel);
+            KeyGenTab.Controls.Add(SNILS_DataGridView);
             KeyGenTab.Controls.Add(subjectControl);
             KeyGenTab.Controls.Add(formProgressBar);
             KeyGenTab.Controls.Add(InputsPannel);
@@ -130,18 +113,77 @@
             KeyGenTab.Location = new Point(4, 24);
             KeyGenTab.Name = "KeyGenTab";
             KeyGenTab.Padding = new Padding(3);
-            KeyGenTab.Size = new Size(752, 543);
+            KeyGenTab.Size = new Size(771, 543);
             KeyGenTab.TabIndex = 1;
             KeyGenTab.Text = "Создание ключа";
             KeyGenTab.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // ManualEditing_panel
             // 
-            panel1.Controls.Add(SNILS_DataGridView);
-            panel1.Location = new Point(8, 542);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(738, 235);
-            panel1.TabIndex = 55;
+            ManualEditing_panel.Controls.Add(Manual_JobTitle_chb);
+            ManualEditing_panel.Controls.Add(Manual_NameLastName_chb);
+            ManualEditing_panel.Controls.Add(Manual_Surname_chb);
+            ManualEditing_panel.Controls.Add(Manual_SNILS_chb);
+            ManualEditing_panel.Controls.Add(Manual_INN_FL_chb);
+            ManualEditing_panel.Location = new Point(749, 88);
+            ManualEditing_panel.Name = "ManualEditing_panel";
+            ManualEditing_panel.Size = new Size(22, 423);
+            ManualEditing_panel.TabIndex = 62;
+            // 
+            // Manual_JobTitle_chb
+            // 
+            Manual_JobTitle_chb.AutoSize = true;
+            Manual_JobTitle_chb.Enabled = false;
+            Manual_JobTitle_chb.Location = new Point(3, 247);
+            Manual_JobTitle_chb.Name = "Manual_JobTitle_chb";
+            Manual_JobTitle_chb.Size = new Size(15, 14);
+            Manual_JobTitle_chb.TabIndex = 59;
+            Manual_JobTitle_chb.UseVisualStyleBackColor = true;
+            Manual_JobTitle_chb.CheckedChanged += Manual_JobTitle_chb_CheckedChanged;
+            // 
+            // Manual_NameLastName_chb
+            // 
+            Manual_NameLastName_chb.AutoSize = true;
+            Manual_NameLastName_chb.Enabled = false;
+            Manual_NameLastName_chb.Location = new Point(3, 73);
+            Manual_NameLastName_chb.Name = "Manual_NameLastName_chb";
+            Manual_NameLastName_chb.Size = new Size(15, 14);
+            Manual_NameLastName_chb.TabIndex = 58;
+            Manual_NameLastName_chb.UseVisualStyleBackColor = true;
+            Manual_NameLastName_chb.CheckedChanged += Manual_NameLastName_chb_CheckedChanged;
+            // 
+            // Manual_Surname_chb
+            // 
+            Manual_Surname_chb.AutoSize = true;
+            Manual_Surname_chb.Enabled = false;
+            Manual_Surname_chb.Location = new Point(3, 44);
+            Manual_Surname_chb.Name = "Manual_Surname_chb";
+            Manual_Surname_chb.Size = new Size(15, 14);
+            Manual_Surname_chb.TabIndex = 57;
+            Manual_Surname_chb.UseVisualStyleBackColor = true;
+            Manual_Surname_chb.CheckedChanged += Manual_Surname_chb_CheckedChanged;
+            // 
+            // Manual_SNILS_chb
+            // 
+            Manual_SNILS_chb.AutoSize = true;
+            Manual_SNILS_chb.Enabled = false;
+            Manual_SNILS_chb.Location = new Point(3, 392);
+            Manual_SNILS_chb.Name = "Manual_SNILS_chb";
+            Manual_SNILS_chb.Size = new Size(15, 14);
+            Manual_SNILS_chb.TabIndex = 61;
+            Manual_SNILS_chb.UseVisualStyleBackColor = true;
+            Manual_SNILS_chb.CheckedChanged += Manual_SNILS_chb_CheckedChanged;
+            // 
+            // Manual_INN_FL_chb
+            // 
+            Manual_INN_FL_chb.AutoSize = true;
+            Manual_INN_FL_chb.Enabled = false;
+            Manual_INN_FL_chb.Location = new Point(3, 304);
+            Manual_INN_FL_chb.Name = "Manual_INN_FL_chb";
+            Manual_INN_FL_chb.Size = new Size(15, 14);
+            Manual_INN_FL_chb.TabIndex = 60;
+            Manual_INN_FL_chb.UseVisualStyleBackColor = true;
+            Manual_INN_FL_chb.CheckedChanged += Manual_INN_FL_chb_CheckedChanged;
             // 
             // SNILS_DataGridView
             // 
@@ -154,7 +196,7 @@
             SNILS_DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             SNILS_DataGridView.Columns.AddRange(new DataGridViewColumn[] { Date_clmn, CommonName_clmn, INN_UL_clmn, FIO_clmn, INN_IP_clmn, SNILS_clmn });
             SNILS_DataGridView.Enabled = false;
-            SNILS_DataGridView.Location = new Point(-1, 0);
+            SNILS_DataGridView.Location = new Point(7, 542);
             SNILS_DataGridView.MultiSelect = false;
             SNILS_DataGridView.Name = "SNILS_DataGridView";
             SNILS_DataGridView.ReadOnly = true;
@@ -165,7 +207,7 @@
             SNILS_DataGridView.ShowCellToolTips = false;
             SNILS_DataGridView.ShowEditingIcon = false;
             SNILS_DataGridView.ShowRowErrors = false;
-            SNILS_DataGridView.Size = new Size(739, 235);
+            SNILS_DataGridView.Size = new Size(758, 0);
             SNILS_DataGridView.TabIndex = 0;
             SNILS_DataGridView.Visible = false;
             SNILS_DataGridView.CellClick += SNILS_DataGridView_CellClick;
@@ -218,19 +260,18 @@
             // 
             // SNILS_clmn
             // 
-            SNILS_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            SNILS_clmn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             SNILS_clmn.HeaderText = "СНИЛС";
             SNILS_clmn.MinimumWidth = 75;
             SNILS_clmn.Name = "SNILS_clmn";
             SNILS_clmn.ReadOnly = true;
-            SNILS_clmn.Width = 75;
             // 
             // subjectControl
             // 
             subjectControl.Controls.Add(IP_rb);
             subjectControl.Controls.Add(UL_rb);
             subjectControl.Controls.Add(FL_rb);
-            subjectControl.Location = new Point(7, 61);
+            subjectControl.Location = new Point(7, 63);
             subjectControl.Name = "subjectControl";
             subjectControl.Size = new Size(737, 19);
             subjectControl.TabIndex = 54;
@@ -276,11 +317,12 @@
             formProgressBar.ForeColor = SystemColors.Desktop;
             formProgressBar.Location = new Point(7, 518);
             formProgressBar.Name = "formProgressBar";
-            formProgressBar.Size = new Size(739, 18);
+            formProgressBar.Size = new Size(760, 18);
             formProgressBar.TabIndex = 50;
             // 
             // InputsPannel
             // 
+            InputsPannel.Controls.Add(isINN_Fl_Exist);
             InputsPannel.Controls.Add(CommonName_label);
             InputsPannel.Controls.Add(OGRNIP_input);
             InputsPannel.Controls.Add(OGRN_label);
@@ -311,8 +353,22 @@
             InputsPannel.Controls.Add(NameLastName_label);
             InputsPannel.Location = new Point(7, 88);
             InputsPannel.Name = "InputsPannel";
-            InputsPannel.Size = new Size(749, 423);
+            InputsPannel.Size = new Size(739, 423);
             InputsPannel.TabIndex = 49;
+            // 
+            // isINN_Fl_Exist
+            // 
+            isINN_Fl_Exist.Anchor = AnchorStyles.None;
+            isINN_Fl_Exist.AutoSize = true;
+            isINN_Fl_Exist.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            isINN_Fl_Exist.ForeColor = Color.Black;
+            isINN_Fl_Exist.Location = new Point(75, 303);
+            isINN_Fl_Exist.Name = "isINN_Fl_Exist";
+            isINN_Fl_Exist.Size = new Size(0, 15);
+            isINN_Fl_Exist.TabIndex = 49;
+            isINN_Fl_Exist.Visible = false;
+            isINN_Fl_Exist.MouseEnter += isINN_Fl_Exist_MouseEnter;
+            isINN_Fl_Exist.MouseLeave += isINN_Fl_Exist_MouseLeave;
             // 
             // CommonName_label
             // 
@@ -348,11 +404,13 @@
             INN_IP_Input.Cursor = Cursors.IBeam;
             INN_IP_Input.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
             INN_IP_Input.Location = new Point(102, 301);
+            INN_IP_Input.MaxLength = 12;
             INN_IP_Input.Name = "INN_IP_Input";
             INN_IP_Input.PlaceholderText = "ИНН ИП, ФЛ или ЕИО предприятия";
             INN_IP_Input.ReadOnly = true;
             INN_IP_Input.Size = new Size(637, 22);
             INN_IP_Input.TabIndex = 46;
+            INN_IP_Input.TextChanged += INN_IP_Input_TextChanged;
             // 
             // JobTitle_label
             // 
@@ -388,11 +446,13 @@
             SNILS_input.Cursor = Cursors.IBeam;
             SNILS_input.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
             SNILS_input.Location = new Point(102, 388);
+            SNILS_input.MaxLength = 11;
             SNILS_input.Name = "SNILS_input";
             SNILS_input.PlaceholderText = "Номер СНИЛС. Генерируется автоматически";
             SNILS_input.ReadOnly = true;
             SNILS_input.Size = new Size(637, 22);
             SNILS_input.TabIndex = 32;
+            SNILS_input.TextChanged += SNILS_input_TextChanged;
             // 
             // Subdivision_label
             // 
@@ -428,11 +488,13 @@
             JobTitle_input.Cursor = Cursors.IBeam;
             JobTitle_input.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
             JobTitle_input.Location = new Point(102, 243);
+            JobTitle_input.MaxLength = 50;
             JobTitle_input.Name = "JobTitle_input";
             JobTitle_input.PlaceholderText = "Должность ИП, ФЛ или владельца ключа в предприятии";
             JobTitle_input.ReadOnly = true;
             JobTitle_input.Size = new Size(637, 22);
             JobTitle_input.TabIndex = 28;
+            JobTitle_input.TextChanged += JobTitle_input_TextChanged;
             // 
             // OrgName_label
             // 
@@ -457,7 +519,7 @@
             // INN_IP_Label
             // 
             INN_IP_Label.AutoSize = true;
-            INN_IP_Label.Location = new Point(3, 304);
+            INN_IP_Label.Location = new Point(3, 303);
             INN_IP_Label.Name = "INN_IP_Label";
             INN_IP_Label.Size = new Size(77, 15);
             INN_IP_Label.TabIndex = 45;
@@ -572,6 +634,7 @@
             Surname_input.ReadOnly = true;
             Surname_input.Size = new Size(637, 22);
             Surname_input.TabIndex = 14;
+            Surname_input.TextChanged += Surname_input_TextChanged;
             // 
             // NameLastName_input
             // 
@@ -583,6 +646,7 @@
             NameLastName_input.ReadOnly = true;
             NameLastName_input.Size = new Size(637, 22);
             NameLastName_input.TabIndex = 16;
+            NameLastName_input.TextChanged += NameLastName_input_TextChanged;
             // 
             // NameLastName_label
             // 
@@ -684,16 +748,15 @@
             INN_label.TabIndex = 0;
             INN_label.Text = "Введите ИНН";
             // 
-            // isManual
+            // MainTabControl
             // 
-            isManual.AutoSize = true;
-            isManual.Location = new Point(599, 8);
-            isManual.Name = "isManual";
-            isManual.Size = new Size(134, 19);
-            isManual.TabIndex = 56;
-            isManual.Text = "Ручное заполнение";
-            isManual.UseVisualStyleBackColor = true;
-            isManual.Click += isManual_Click;
+            MainTabControl.Controls.Add(KeyGenTab);
+            MainTabControl.Dock = DockStyle.Fill;
+            MainTabControl.Location = new Point(0, 0);
+            MainTabControl.Name = "MainTabControl";
+            MainTabControl.SelectedIndex = 0;
+            MainTabControl.Size = new Size(779, 571);
+            MainTabControl.TabIndex = 5;
             // 
             // DerjavaTools
             // 
@@ -702,7 +765,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(760, 571);
+            ClientSize = new Size(779, 571);
             Controls.Add(MainTabControl);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -710,29 +773,42 @@
             MinimumSize = new Size(776, 610);
             Name = "DerjavaTools";
             Text = "Держава TollBox";
-            MainTabControl.ResumeLayout(false);
             KeyGenTab.ResumeLayout(false);
             KeyGenTab.PerformLayout();
-            panel1.ResumeLayout(false);
+            ManualEditing_panel.ResumeLayout(false);
+            ManualEditing_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)SNILS_DataGridView).EndInit();
             subjectControl.ResumeLayout(false);
             subjectControl.PerformLayout();
             InputsPannel.ResumeLayout(false);
             InputsPannel.PerformLayout();
+            MainTabControl.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
-        private TabControl MainTabControl;
+
         protected TabPage KeyGenTab;
-        private RadioButton IP_rb;
-        private Panel panel1;
+        private Panel ManualEditing_panel;
+        private CheckBox Manual_JobTitle_chb;
+        private CheckBox Manual_NameLastName_chb;
+        private CheckBox Manual_Surname_chb;
+        private CheckBox Manual_SNILS_chb;
+        private CheckBox Manual_INN_FL_chb;
         private DataGridView SNILS_DataGridView;
+        private DataGridViewTextBoxColumn Date_clmn;
+        private DataGridViewTextBoxColumn CommonName_clmn;
+        private DataGridViewTextBoxColumn INN_UL_clmn;
+        private DataGridViewTextBoxColumn FIO_clmn;
+        private DataGridViewTextBoxColumn INN_IP_clmn;
+        private DataGridViewTextBoxColumn SNILS_clmn;
         private Panel subjectControl;
+        private RadioButton IP_rb;
         private RadioButton UL_rb;
         private RadioButton FL_rb;
         private ProgressBar formProgressBar;
         private Panel InputsPannel;
+        private Label isINN_Fl_Exist;
         private Label CommonName_label;
         private TextBox OGRNIP_input;
         private Label OGRN_label;
@@ -769,12 +845,6 @@
         private Button getINNdata_btn;
         private MaskedTextBox INN_input;
         private Label INN_label;
-        private DataGridViewTextBoxColumn Date_clmn;
-        private DataGridViewTextBoxColumn CommonName_clmn;
-        private DataGridViewTextBoxColumn INN_UL_clmn;
-        private DataGridViewTextBoxColumn FIO_clmn;
-        private DataGridViewTextBoxColumn INN_IP_clmn;
-        private DataGridViewTextBoxColumn SNILS_clmn;
-        private CheckBox isManual;
+        private TabControl MainTabControl;
     }
 }

@@ -42,40 +42,50 @@ public class SNILS_generator
             Directory.CreateDirectory(snilsfolderPath);
         }
 
-        try
+        if (File.Exists(snilsFilePath))
         {
-
-            using (StreamReader streamReader = File.OpenText(snilsFilePath))
+            try
             {
-                string fileData = streamReader.ReadToEnd();
-                foreach (string singleLine in fileData.Split("\n"))
+
+                using (StreamReader streamReader = File.OpenText(snilsFilePath))
                 {
-
-                    if (!string.IsNullOrEmpty(singleLine))
+                    string fileData = streamReader.ReadToEnd();
+                    foreach (string singleLine in fileData.Split("\n"))
                     {
-                        lines.Add(singleLine);
-                        string[] arrBlock = singleLine.Split("~");
-                        if (!IPsDict.ContainsKey(arrBlock[4]))
-                        {
-                            IPsDict.Add(arrBlock[4], arrBlock[5]);
-                        }
-                    }
 
+                        if (!string.IsNullOrEmpty(singleLine))
+                        {
+                            lines.Add(singleLine);
+                            string[] arrBlock = singleLine.Split("~");
+                            if (!IPsDict.ContainsKey(arrBlock[4]))
+                            {
+                                IPsDict.Add(arrBlock[4], arrBlock[5]);
+                            }
+                        }
+
+                    }
                 }
+
+               
             }
 
-            return lines;
+            catch (Exception e)
+            {
+                FilesCreator.Log_creator(e);
+                throw;
+            }
         }
-
-        catch (Exception e)
+        else
         {
-            FilesCreator.Log_creator(e);
-            throw;
-
+            using (StreamWriter sw = File.CreateText(snilsFilePath))
+            {
+                
+            }
         }
+        return lines;
     }
 
-    public static List<string> saveUsedSnils(ClientObj client)
+    public static List<string> saveUsedSnils(ClientObj client, string[] subjectInfo)
     {
         DateTime date = DateTime.Now; //ToString("d") для получения только даты
 
@@ -91,11 +101,11 @@ public class SNILS_generator
             {
                 finalResult = client.CommonName + "~" + client.INN_UL + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
-            else if (client.INN_IP.Length == 12 && string.IsNullOrEmpty(client.OGRNIP))
+            else if (client.INN_IP.Length == 12 && subjectInfo[0] == "FL")
             {
                 finalResult = "Физическое лицо" + "~" + "Нет данных" + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }
-            else if (client.INN_IP.Length == 12 && client.OGRNIP.Length > 0)
+            else if (client.INN_IP.Length == 12 && client.OGRNIP.Length > 0 && subjectInfo[0] == "IP")
             {
                 finalResult = "Инд. предприниматель" + "~" + "Нет данных" + "~" + FIO + "~" + client.INN_IP + "~" + client.SNILS + "\n";
             }

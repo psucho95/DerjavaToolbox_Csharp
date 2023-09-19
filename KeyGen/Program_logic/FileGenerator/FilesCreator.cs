@@ -15,7 +15,7 @@ public static class FilesCreator
         {
             Directory.CreateDirectory(dir);
         }
-        File.AppendAllText(dir + "\\" + date.ToString("d") + ".txt", date + " : " + exception.StackTrace + "\n" + "\n");
+        File.AppendAllText(dir + "\\" + date.ToString("d") + ".txt", date + " : " + exception.Message + ":\n" + exception.StackTrace + "\n" + "\n");
     }
 
     public static async Task saveSysIdAsync(string INN)

@@ -5,7 +5,7 @@ namespace WinFormsApp1.KeyGen.Program_logic.POM;
 
 public class BasePage
 {
-    protected IWebDriver webDriver;
+    protected static IWebDriver webDriver;
     static bool setHeadless = true;
     static bool setHTTP = false;
     protected string driverLocation;
@@ -16,7 +16,7 @@ public class BasePage
         {
             ChromeOptions options = new ChromeOptions();
             var service = ChromeDriverService.CreateDefaultService();
-
+            service.HideCommandPromptWindow = true;
 
 
             options.AddExtensions(CRX_v1_2_13);
@@ -24,9 +24,7 @@ public class BasePage
             options.AddArguments("--ignore-certificate-errors");
             options.AddArguments("--no-sandbox");
             options.AddArguments("--disable-dev-shm-usage");
-            options.AddExcludedArguments(new List<string>() { "enable-logging" });
             options.AcceptInsecureCertificates = true;
-
 
             if (!setHeadless) options.AddArguments();
             else options.AddArguments("--headless=new");
@@ -34,7 +32,7 @@ public class BasePage
             if (osVersion == "10.0")
             {
                 driverLocation = driver_win8_11;
-                options.BinaryLocation = chrome115;
+                options.BinaryLocation = chrome117;
             }
             else if (osVersion == "6.1" || osVersion == "6.2" || osVersion == "6.3")
             {
@@ -45,7 +43,7 @@ public class BasePage
             else
             {
                 driverLocation = driver_win8_11;
-                options.BinaryLocation = chrome115;
+                options.BinaryLocation = chrome117;
             }
 
             service.DriverServicePath = driverLocation;

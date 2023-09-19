@@ -71,4 +71,20 @@ public class ResponseObj
         }
         return SysId;
     }
+    public static async Task<bool> checkIfExist(string INN)
+    {
+        bool exist = false;
+        try
+        {
+            var SysIdURL = string.Format("https://egrul.itsoft.ru/{0}.xml", INN);
+            xmlResponse = new XmlDocument();
+            xmlResponse.Load(SysIdURL);
+            exist = true;
+        }
+        catch (Exception exception)
+        {
+            exist = false;
+        }
+        return exist;
+    }
 }

@@ -1,5 +1,6 @@
-using RestSharp;
+п»їusing RestSharp;
 using System.Windows.Forms;
+using DerjavaToolbox.KeyGen.Program_logic.Utils;
 using WinFormsApp1.CommonUtils;
 using WinFormsApp1.KeyGen.API_logic;
 using WinFormsApp1.KeyGen.Program_logic.FileGenerator;
@@ -8,6 +9,7 @@ using WinFormsApp1.KeyGen.Program_logic.Utils;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ProgressBar = System.Windows.Forms.ProgressBar;
 using ToolTip = System.Windows.Forms.ToolTip;
+using System.Text.RegularExpressions;
 
 namespace WinFormsApp1
 {
@@ -18,6 +20,8 @@ namespace WinFormsApp1
         protected ClientObj client;
         public static ProgressBar Main_ProgressBar;
         private bool isCompleteData;
+        protected string innFlInfosMessage = "РќРµС‚ РґР°РЅРЅС‹С…";
+        protected ToolTip tt = new ToolTip();
 
         public DerjavaTools()
         {
@@ -25,6 +29,19 @@ namespace WinFormsApp1
             Main_ProgressBar = formProgressBar;
             formProgressBar.BackColor = Color.DarkTurquoise;
             updateTable(SNILS_generator.checkSNILSwarehouse());
+            //foreach (var param in NeededDataChecker.neededDataChecker())
+            //{
+
+            //}
+
+            //NeededDataChecker.neededDataChecker();
+
+
+
+            //Blocker.needDataCheck(this);
+            //Blocker.blockPanel.Controls.Add(Blocker.RootKeyLabelCreater());
+            //Blocker.blockPanel.Controls.Add(Blocker.CSPLabelCreater());
+            //Blocker.blockPanel.Controls.Add(Blocker.CSPpluginLabelCreater());
         }
         private void downloadEGR_btn_Click(object sender, EventArgs e)
         {
@@ -32,8 +49,8 @@ namespace WinFormsApp1
             FilesCreator.saveSysIdAsync(INN_input.Text);
             switch (INN_UL_input.Text.Length)
             {
-                case 12: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_IP_Input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
-                case 10: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_UL_input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
+                case 12: MessageBoxCreator.craeteMessageBox("Р’С‹РїРёСЃРєР° РїРѕ РёРЅРЅ " + INN_IP_Input.Text + " Р±С‹Р»Р° СЃРѕС…СЂР°РЅРµРЅР° РІ РїР°РїРєРµ SystemIdInfos", "РЎРѕС…СЂР°РЅРµРЅРёРµ РІС‹РїРёСЃРєРё", MessageBoxIcon.Information); break;
+                case 10: MessageBoxCreator.craeteMessageBox("Р’С‹РїРёСЃРєР° РїРѕ РёРЅРЅ " + INN_UL_input.Text + " Р±С‹Р»Р° СЃРѕС…СЂР°РЅРµРЅР° РІ РїР°РїРєРµ SystemIdInfos", "РЎРѕС…СЂР°РЅРµРЅРёРµ РІС‹РїРёСЃРєРё", MessageBoxIcon.Information); break;
             }
 
         }
@@ -69,6 +86,7 @@ namespace WinFormsApp1
         }
         private async void getINNdata_btn_ClickAsync(object? sender, EventArgs e)
         {
+
             try
             {
                 client = new ClientObj(INN_input.Text);
@@ -90,14 +108,33 @@ namespace WinFormsApp1
                         City_input.Text = client.City;
                         Region_input.Text = client.Region;
                         OrgName_input.Text = client.OrgName;
-                        Subdivision_input.Text = "Онлайн";
+                        Subdivision_input.Text = "РћРЅР»Р°Р№РЅ";
                         JobTitle_input.Text = client.JobTitle;
                         OGRN_input.Text = client.OGRN;
                         INN_IP_Input.Text = client.INN_IP;
                         INN_UL_input.Text = client.INN_UL;
                         SNILS_input.Text = client.SNILS;
                         MassPropertyChanger.setCustomDisable(InputsPannel);
+                        isINN_Fl_Exist.Visible = true;
+                        if (await ResponseObj.checkIfExist(client.INN_IP))
+                        {
+                            isINN_Fl_Exist.Visible = true;
+                            innFlInfosMessage = null;
+                            isINN_Fl_Exist.Text = "вњ”";
+                            isINN_Fl_Exist.ForeColor = Color.Green;
+                            innFlInfosMessage = "Р”Р°РЅРЅС‹Рµ РїРѕ РРќРќ " + client.INN_IP + " РїСЂРёСЃСѓС‚СЃС‚РІСѓСЋС‚ РІ Р•Р“Р РРџ";
+                        }
+                        else
+                        {
+                            isINN_Fl_Exist.Visible = true;
+                            innFlInfosMessage = null;
+                            isINN_Fl_Exist.Text = "вњ–";
+                            isINN_Fl_Exist.ForeColor = Color.DarkRed;
+                            innFlInfosMessage = "Р”Р°РЅРЅС‹Рµ РїРѕ РРќРќ " + client.INN_IP + " РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚ РІ Р•Р“Р РРџ";
+                        }
+
                         break;
+
                     case 12:
                         UL_rb.Enabled = false;
                         IP_rb.Enabled = true;
@@ -111,7 +148,7 @@ namespace WinFormsApp1
                                 CommonName_input.Text = subjectInfo[1] + " " + client.Surname + " " + client.NameLastName;
                                 Surname_input.Text = client.Surname;
                                 NameLastName_input.Text = client.NameLastName;
-                                JobTitle_input.Text = "Физическое лицо";
+                                JobTitle_input.Text = "Р¤РёР·РёС‡РµСЃРєРѕРµ Р»РёС†Рѕ";
                                 INN_IP_Input.Text = client.INN_IP;
                                 SNILS_input.Text = client.SNILS;
                                 MassPropertyChanger.setCustomDisable(InputsPannel);
@@ -120,7 +157,7 @@ namespace WinFormsApp1
                                 CommonName_input.Text = subjectInfo[1] + " " + client.Surname + " " + client.NameLastName;
                                 Surname_input.Text = client.Surname;
                                 NameLastName_input.Text = client.NameLastName;
-                                JobTitle_input.Text = "Индивидуальный предприниматель";
+                                JobTitle_input.Text = "РРЅРґРёРІРёРґСѓР°Р»СЊРЅС‹Р№ РїСЂРµРґРїСЂРёРЅРёРјР°С‚РµР»СЊ";
                                 INN_IP_Input.Text = client.INN_IP;
                                 OGRN_input.Text = client.OGRN;
                                 SNILS_input.Text = client.SNILS;
@@ -133,6 +170,7 @@ namespace WinFormsApp1
                 registerINN_btn.Enabled = true;
                 showBrowser_chb.Enabled = true;
                 httpFix_chb.Enabled = true;
+                MassPropertyChanger.unbockManual(ManualEditing_panel, true);
             }
             catch (Exception exception)
             {
@@ -141,20 +179,26 @@ namespace WinFormsApp1
                 showBrowser_chb.Enabled = false;
                 httpFix_chb.Enabled = false;
                 FilesCreator.Log_creator(exception);
-                MessageBoxCreator.craeteMessageBox("Данные по введённому ИНН отсутствуют!", "Ошибка получения данных", MessageBoxIcon.Error);
+                MessageBoxCreator.craeteMessageBox("Р”Р°РЅРЅС‹Рµ РїРѕ РІРІРµРґС‘РЅРЅРѕРјСѓ РРќРќ РѕС‚СЃСѓС‚СЃС‚РІСѓСЋС‚!", "РћС€РёР±РєР° РїРѕР»СѓС‡РµРЅРёСЏ РґР°РЅРЅС‹С…", MessageBoxIcon.Error);
+                isINN_Fl_Exist.Visible = false;
             }
         }
         private void Subject_RadioButton_CheckedChanged(object sender, EventArgs e)
         {
             SubjectSetter.getSubjectState(subjectControl, ref subjectInfo);
+            if (UL_rb.Checked)
+            {
+                isINN_Fl_Exist.Visible = true;
+            }
+
             if (FL_rb.Checked)
             {
                 CommonName_input.Text = subjectInfo[1] + " " + client.Surname + " " + client.NameLastName;
                 OGRNIP_input.Enabled = false;
                 OGRNIP_input.Text = "";
-                OGRNIP_input.PlaceholderText = "Поле не используется в текущем контексте";
-                JobTitle_input.Text = "Физическое лицо";
-
+                OGRNIP_input.PlaceholderText = "РџРѕР»Рµ РЅРµ РёСЃРїРѕР»СЊР·СѓРµС‚СЃСЏ РІ С‚РµРєСѓС‰РµРј РєРѕРЅС‚РµРєСЃС‚Рµ";
+                JobTitle_input.Text = "Р¤РёР·РёС‡РµСЃРєРѕРµ Р»РёС†Рѕ";
+                isINN_Fl_Exist.Visible = false;
             }
             else if (IP_rb.Checked)
             {
@@ -162,25 +206,31 @@ namespace WinFormsApp1
                 CommonName_input.Text = subjectInfo[1] + " " + client.Surname + " " + client.NameLastName;
                 OGRNIP_input.Enabled = true;
                 OGRNIP_input.Text = client.OGRNIP;
-                JobTitle_input.Text = "Индивидуальный предприниматель";
+                JobTitle_input.Text = "РРЅРґРёРІРёРґСѓР°Р»СЊРЅС‹Р№ РїСЂРµРґРїСЂРёРЅРёРјР°С‚РµР»СЊ";
+                isINN_Fl_Exist.Visible = false;
             }
 
         }
         private void createHistory_chb_CheckedChanged(object sender, EventArgs e)
         {
-
+            int allRowsHeight = 0;
+            switch (SNILS_DataGridView.Rows.Count)
+            {
+                case <= 10: allRowsHeight = (SNILS_DataGridView.Rows.Count * 25) + 50; break;
+                case > 10: allRowsHeight = 250; break;
+            }
             if (this.Height != 610)
             {
                 SNILS_DataGridView.Enabled = false;
                 SNILS_DataGridView.Visible = false;
-                Size = new Size(776, 610);
+                Size = new Size(795, 610);
 
             }
             else
             {
                 SNILS_DataGridView.Enabled = true;
                 SNILS_DataGridView.Visible = true;
-                Size = new Size(776, 850);
+                Size = new Size(795, 610 + allRowsHeight);
 
             }
         }
@@ -189,31 +239,49 @@ namespace WinFormsApp1
             Blocker.createBlocker(this);
             try
             {
-                CancellationTokenSource cts = new CancellationTokenSource();
-                Blocker.createBlocker(this);
-
+                foreach (Control node in ManualEditing_panel.Controls)
+                {
+                    if (node is CheckBox)
+                    {
+                        CheckBox checkBox = (CheckBox)node;
+                        if (checkBox.Checked)
+                        {
+                            switch (checkBox.Name)
+                            {
+                                case "Manual_Surname_chb": client.Surname = Surname_input.Text; break;
+                                case "Manual_NameLastName_chb": client.NameLastName = NameLastName_input.Text; break;
+                                case "Manual_JobTitle_chb": client.JobTitle = JobTitle_input.Text; break;
+                                case "Manual_INN_FL_chb": client.INN_IP = INN_IP_Input.Text; break;
+                                case "Manual_SNILS_chb": client.SNILS = SNILS_input.Text; break;
+                            }
+                        }
+                    }
+                }
 
                 KeyCreationTask keyCreation = new KeyCreationTask(client, subjectInfo);
-                await Task.Run(() => keyCreation.runKeyTask(cts.Token), cts.Token); // передача CancellationToken
+                await Task.Run(() => keyCreation.runKeyTask());
+
                 if (keyCreation.isCompleteWork())
                 {
-                    SNILS_generator.saveUsedSnils(client);
+                    SNILS_generator.saveUsedSnils(client, subjectInfo);
                     updateTable(SNILS_generator.checkSNILSwarehouse());
                 }
 
+                INN_input.Clear();
+                MassPropertyChanger.setDefaultData(InputsPannel);
+                MassPropertyChanger.disableAllSubjectControl(subjectControl);
+                MassPropertyChanger.unbockManual(ManualEditing_panel, false);
+                MassPropertyChanger.uncheckManual(Manual_INN_FL_chb);
                 Blocker.deleteBlocker(this);
                 showBrowser_chb.Enabled = false;
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
-                INN_input.Clear();
 
-                MassPropertyChanger.setDefaultData(InputsPannel);
-                MassPropertyChanger.disableAllSubjectControl(subjectControl);
-                formProgressBar.BackColor = Color.Green;
-                Thread.Sleep(1000);
+                await MessageBoxCreator.craeteMessageBox("РљР»СЋС‡ СЃ РРќРќ " + client.SubjectINN + " Р±С‹Р» СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ РІ СЃРёСЃС‚РµРјРµ", "РљР»СЋС‡ Р±С‹Р» СѓСЃРїРµС€РЅРѕ СЃРѕР·РґР°РЅ", MessageBoxIcon.Information);
                 formProgressBar.Value = 0;
-                MessageBoxCreator.craeteMessageBox("Ключ с ИНН " + client.SubjectINN + " был успешно создан в системе", "Ключ был успешно создан", MessageBoxIcon.Information);
+
                 client = null;
+
             }
             catch (Exception exception)
             {
@@ -223,13 +291,24 @@ namespace WinFormsApp1
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
                 INN_input.Clear();
+
+                if (Regex.IsMatch(exception.Message, "^[Рђ-РЇР°-СЏ]+$"))
+                {
+                    MessageBoxCreator.craeteMessageBox(exception.Message, "РћС€РёР±РєР° СЃРѕР·РґР°РЅРёСЏ РєР»СЋС‡Р°", MessageBoxIcon.Error);
+                }
+                else
+                {
+                    MessageBoxCreator.craeteMessageBox("РЎРѕР·РґР°РЅРёРµ РєР»СЋС‡Р° РЅРµ Р±С‹Р»Рѕ Р·Р°РІРµСЂС€РµРЅРѕ. РџРѕР¶Р°Р»СѓР№СЃС‚Р°, РѕР±СЂР°С‚РёС‚РµСЃСЊ Рє Р»РѕРіР°Рј РїСЂРѕРіСЂР°РјРјС‹", "РћС€РёР±РєР° СЃРѕР·РґР°РЅРёСЏ РєР»СЋС‡Р°", MessageBoxIcon.Error);
+                }
+
+
                 formProgressBar.Value = 0;
                 MassPropertyChanger.setDefaultData(InputsPannel);
                 MassPropertyChanger.disableAllSubjectControl(subjectControl);
-                formProgressBar.BackColor = Color.DarkRed;
-                Thread.Sleep(1000);
-                MessageBoxCreator.craeteMessageBox("Не удалось создать ключ по заданным параметрам!", "Ошибка создания ключа", MessageBoxIcon.Error);
                 client = null;
+                MassPropertyChanger.unbockManual(ManualEditing_panel, false);
+                MassPropertyChanger.uncheckManual(ManualEditing_panel);
+                isINN_Fl_Exist.Visible = false;
             }
         }
         private void httpFix_chb_CheckedChanged(object sender, EventArgs e)
@@ -250,7 +329,6 @@ namespace WinFormsApp1
             }
 
         }
-
         private void SNILS_DataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -259,27 +337,149 @@ namespace WinFormsApp1
                 string value = SNILS_DataGridView.Rows[rowNumber].Cells[4].Value.ToString();
 
                 Clipboard.SetText(value);
-                MessageBoxCreator.craeteMessageBox("ИНН " + value + " был скопирован в буфер обмена", "ИНН ФЛ/ИП", MessageBoxIcon.Information);
+                MessageBoxCreator.craeteMessageBox("РРќРќ " + value + " Р±С‹Р» СЃРєРѕРїРёСЂРѕРІР°РЅ РІ Р±СѓС„РµСЂ РѕР±РјРµРЅР°", "РРќРќ Р¤Р›/РРџ", MessageBoxIcon.Information);
+            }
+        }
+        private void isINN_Fl_Exist_MouseEnter(object sender, EventArgs e)
+        {
+            if (isINN_Fl_Exist.Visible)
+            {
+                tt.Show(innFlInfosMessage, isINN_Fl_Exist);
+            }
+        }
+        private void isINN_Fl_Exist_MouseLeave(object sender, EventArgs e)
+        {
+            tt.Hide(isINN_Fl_Exist);
+        }
+
+        private void Manual_Surname_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Manual_Surname_chb.Checked)
+            {
+                Surname_input.ReadOnly = false;
+            }
+
+            else
+            {
+                Surname_input.ReadOnly = true;
             }
         }
 
-        private void isManual_Click(object sender, EventArgs e)
+        private void Manual_NameLastName_chb_CheckedChanged(object sender, EventArgs e)
         {
-            if (isManual.Checked)
+            if (Manual_NameLastName_chb.Checked)
             {
-                INN_input.Enabled = false;
-                getINNdata_btn.Enabled = false;
-                client = null;
-                MassPropertyChanger.setDefaultData(InputsPannel);
-                MassPropertyChanger.setEnableAll(InputsPannel);
+                NameLastName_input.ReadOnly = false;
+            }
+
+            else
+            {
+                NameLastName_input.ReadOnly = true;
+            }
+        }
+
+        private void Manual_JobTitle_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Manual_JobTitle_chb.Checked)
+            {
+                JobTitle_input.ReadOnly = false;
+            }
+
+            else
+            {
+                JobTitle_input.ReadOnly = true;
+            }
+        }
+
+        private void Manual_INN_FL_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Manual_INN_FL_chb.Checked)
+            {
+                INN_IP_Input.ReadOnly = false;
+                isINN_Fl_Exist.Visible = false;
+            }
+
+            else
+            {
+                INN_IP_Input.ReadOnly = true;
+                isINN_Fl_Exist.Visible = true;
+            }
+        }
+
+        private void Manual_SNILS_chb_CheckedChanged(object sender, EventArgs e)
+        {
+            if (Manual_SNILS_chb.Checked)
+            {
+                SNILS_input.ReadOnly = false;
+            }
+
+            else
+            {
+                SNILS_input.ReadOnly = true;
+            }
+        }
+
+        private void SNILS_input_TextChanged(object sender, EventArgs e)
+        {
+            if (SNILS_input.Text.Length < 11)
+            {
+                SNILS_input.ForeColor = Color.Red;
+                registerINN_btn.Enabled = false;
             }
             else
             {
-                INN_input.Enabled = true;
-                getINNdata_btn.Enabled = true;
-                client = null;
-                MassPropertyChanger.setDefaultData(InputsPannel);
-                MassPropertyChanger.disableAllSubjectControl(InputsPannel);
+                SNILS_input.ForeColor = Color.Black;
+                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+            }
+        }
+
+        private void INN_IP_Input_TextChanged(object sender, EventArgs e)
+        {
+            if (INN_IP_Input.Text.Length < 12)
+            {
+                INN_IP_Input.ForeColor = Color.Red;
+                registerINN_btn.Enabled = false;
+            }
+            else
+            {
+                INN_IP_Input.ForeColor = Color.Black;
+                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+            }
+        }
+
+        private void Surname_input_TextChanged(object sender, EventArgs e)
+        {
+            if (Surname_input.Text.Length <= 0)
+            {
+                registerINN_btn.Enabled = false;
+            }
+            else
+            {
+                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+            }
+        }
+
+        private void NameLastName_input_TextChanged(object sender, EventArgs e)
+        {
+            if (NameLastName_input.Text.Length <= 0)
+            {
+                registerINN_btn.Enabled = false;
+            }
+            else
+            {
+                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+            }
+        }
+
+        private void JobTitle_input_TextChanged(object sender, EventArgs e)
+        {
+            if (JobTitle_input.Text.Length <= 0)
+            {
+                registerINN_btn.Enabled = false;
+            }
+            else
+            {
+                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length >1) registerINN_btn.Enabled = true;
             }
         }
     }

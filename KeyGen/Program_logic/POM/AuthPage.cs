@@ -18,22 +18,22 @@ public class AuthPage
     By loginInput = By.Id("ctl00_MainContent_MasterPageBodyASPxRoundPanel_ASPxRoundPanel1_LoginUser_UserName_I");
     By passwordInput = By.Id("ctl00_MainContent_MasterPageBodyASPxRoundPanel_ASPxRoundPanel1_LoginUser_Password_I");
     By authButton = By.Id("ctl00_MainContent_MasterPageBodyASPxRoundPanel_ASPxRoundPanel1_LoginUser_LoginButton_CD");
-   
-    public async Task FillAuthData(RegisterPage registerPage)
+
+    public void FillAuthData(RegisterPage registerPage)
     {
         try
         {
             new WebDriverWait(AuthPageDriver, TimeSpan.FromSeconds(10)).Until(ExpectedConditions.ElementIsVisible(hereRedirect));
-        AuthPageDriver.FindElement(hereRedirect).Click();
-        Main_ProgressBar.Value = 16;
-        AuthPageDriver.FindElement(loginInput).SendKeys(registerPage.savedLogin);
-        Main_ProgressBar.Value = 20;
-        AuthPageDriver.FindElement(passwordInput).SendKeys(registerPage.savedPassword);
-        Main_ProgressBar.Value = 25;
-        AuthPageDriver.FindElement(authButton).Click();
-        Main_ProgressBar.Value = 30;
+            AuthPageDriver.FindElement(hereRedirect).Click();
+            Main_ProgressBar.Value = 16;
+            AuthPageDriver.FindElement(loginInput).SendKeys(registerPage.savedLogin);
+            Main_ProgressBar.Value = 20;
+            AuthPageDriver.FindElement(passwordInput).SendKeys(registerPage.savedPassword);
+            Main_ProgressBar.Value = 25;
+            AuthPageDriver.FindElement(authButton).Click();
+            Main_ProgressBar.Value = 30;
         }
-        catch (Exception e)
+        catch (Exception exception)
         {
             throw;
         }

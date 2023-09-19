@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 public class MessageBoxCreator
 {
-    public static void craeteMessageBox(string Message, string Header, MessageBoxIcon ico)
+    public static async Task craeteMessageBox(string Message, string Header, MessageBoxIcon ico)
     {
 
         MessageBox.Show(
