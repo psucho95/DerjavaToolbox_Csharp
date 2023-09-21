@@ -15,6 +15,7 @@ public class SNILS_generator
     private static List<string> lines = new List<string>();
     protected static string finalResult;
     private static Dictionary<string, string> IPsDict = new Dictionary<string, string>();
+    private static bool isValid = false;
 
 
     private static string GenerateSnils()
@@ -57,16 +58,16 @@ public class SNILS_generator
                         {
                             lines.Add(singleLine);
                             string[] arrBlock = singleLine.Split("~");
-                            if (!IPsDict.ContainsKey(arrBlock[4]))
+                            if (!IPsDict.ContainsKey(arrBlock[5]))
                             {
-                                IPsDict.Add(arrBlock[4], arrBlock[5]);
+                                IPsDict.Add(arrBlock[5], arrBlock[4]);
                             }
                         }
 
                     }
                 }
 
-               
+
             }
 
             catch (Exception e)
@@ -79,7 +80,7 @@ public class SNILS_generator
         {
             using (StreamWriter sw = File.CreateText(snilsFilePath))
             {
-                
+
             }
         }
         return lines;
@@ -128,15 +129,73 @@ public class SNILS_generator
 
     public static string setSNILS(string INN_IP)
     {
-        if (IPsDict.ContainsKey(INN_IP))
+
+        foreach (var pair in IPsDict)
         {
-            SNILS = IPsDict[INN_IP];
+            if (checkSNILSvalid(pair.Key) && pair.Value == INN_IP)
+            {
+                SNILS = pair.Key;
+                break;
+            }
         }
-        else
+
+        if (SNILS == null || SNILS == "" || string.IsNullOrEmpty(SNILS))
         {
             SNILS = GenerateSnils();
         }
+
         return SNILS;
+
+
+        //if (IPsDict.ContainsValue(INN_IP))
+        //{
+        //    foreach (var pair in IPsDict)
+        //    {
+        //        if (checkSNILSvalid(pair.Key) && pair.Value == INN_IP)
+        //        {
+        //            SNILS = pair.Key;
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    SNILS = GenerateSnils();
+        //}
+        //return SNILS;
     }
 
+    protected static bool checkSNILSvalid(string SNILS)
+    {
+        if (!String.IsNullOrEmpty(SNILS))
+        {
+            // Массив сообщений об ошибках 
+            List<string> error = new List<string>();
+            // Удаляем тире и пробелы  
+            string number = SNILS.Replace(" ", "").Replace("-", "");
+
+
+            string control = number.Substring(number.Length - 2);
+
+            number = number.Substring(0, 9);
+
+            if (error.Count == 0)
+            {
+                // Вычисляем контрольную сумму  
+                int result = 0;
+                int total = number.Length;
+                for (int i = 0; i < total; i++)
+                {
+                    result += (total - i) * int.Parse(number[i].ToString());
+                }
+                // Корректируем контрольное число  
+                if (result == 100 || result == 101) result = 0;
+                if (result > 101) result %= 101;
+                // Проверчем контрольное число  
+                if (result.ToString() == control) isValid = true;
+                else isValid = false;
+            }
+        }
+
+        return isValid;
+    }
 }
