@@ -1,6 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using static WinFormsApp1.DerjavaTools;
+using static WinFormsApp1.KeyGen.StaticData.StaticData;
 
 namespace WinFormsApp1.CommonUtils;
 
@@ -73,7 +75,7 @@ public class Blocker
             Font = new Font("Arial", 20, FontStyle.Bold),
             AutoSize = true
         };
-        waiterText.Location = new Point(70, 240);
+        waiterText.Location = new Point(109, 240);
 
         return waiterText;
     }
@@ -86,7 +88,7 @@ public class Blocker
             Font = new Font("Arial", 20, FontStyle.Bold),
             AutoSize = true
         };
-        waiterText.Location = new Point(70, 290);
+        waiterText.Location = new Point(109, 290);
 
         return waiterText;
     }
@@ -99,8 +101,25 @@ public class Blocker
             Font = new Font("Arial", 20, FontStyle.Bold),
             AutoSize = true
         };
-        waiterText.Location = new Point(70,340);
+        waiterText.Location = new Point(109,340);
 
         return waiterText;
+    }
+    
+    public static Button openNeedeDataFolder()
+    {
+        var openButton = new Button()
+        {
+            Text = "Перейти в папку с инструкцией",
+            AutoSize = true
+        };
+        openButton.Location = new Point(330, 390);
+        openButton.Click += OpenButton_Click;
+        return openButton;
+    }
+    private static void OpenButton_Click(object sender, EventArgs e)
+    {
+        string dir = rootDirectory + neededDataFolder;
+        Process.Start("explorer.exe", dir);
     }
 }

@@ -16,9 +16,10 @@ public static class StaticData
    public static string chrome109 = rootDirectory + "\\ProgramData\\WebDriver\\Chromium\\Win7andLower\\chromium-gost-109\\chrome.exe";
    public static string HTTPS_uri = "https://testca2012.cryptopro.ru/UI/1/RegRequest.aspx";
    public static string HTTP_uri = "http://testca2012.cryptopro.ru/UI/1/RegRequest.aspx";
-   public static string cspX64 = rootDirectory + "C:\\Program Files\\Crypto Pro\\CSP\\cpanel.cpl";
-   public static string cspX32 = rootDirectory + "C:\\Program Files (x86)\\Crypto Pro\\CSP\\cpanel.cpl";
-   public static string cspPluginX64 = rootDirectory + "C:\\Program Files\\Crypto Pro\\CAdES Browser Plug-in\\config.html";
-   public static string cspPluginX32 = rootDirectory + "C:\\Program Files (x86)\\Crypto Pro\\CAdES Browser Plug-in\\config.html";
+   public static string cspX64 = "C:\\Program Files\\Crypto Pro\\CSP\\cpanel.cpl";
+   public static string cspX32 = "C:\\Program Files (x86)\\Crypto Pro\\CSP\\cpanel.cpl";
+   public static string cspPluginX64 =  "C:\\Program Files\\Crypto Pro\\CAdES Browser Plug-in\\config.html";
+   public static string cspPluginX32 =  "C:\\Program Files (x86)\\Crypto Pro\\CAdES Browser Plug-in\\config.html";
    public static string rootKeyThumbPrint = "18F7C1FCC3090203FD5BAA2F861A754976C8DD25";
+   public static string neededDataFolder = "\\NeededData";
 }

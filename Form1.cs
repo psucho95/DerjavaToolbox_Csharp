@@ -1,21 +1,16 @@
-﻿using RestSharp;
-using System.Windows.Forms;
-using DerjavaToolbox.KeyGen.Program_logic.Utils;
+﻿using DerjavaToolbox.KeyGen.Program_logic.Utils;
 using WinFormsApp1.CommonUtils;
 using WinFormsApp1.KeyGen.API_logic;
 using WinFormsApp1.KeyGen.Program_logic.FileGenerator;
 using WinFormsApp1.KeyGen.Program_logic.POM;
 using WinFormsApp1.KeyGen.Program_logic.Utils;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using ProgressBar = System.Windows.Forms.ProgressBar;
 using ToolTip = System.Windows.Forms.ToolTip;
 using System.Text.RegularExpressions;
 using static WinFormsApp1.KeyGen.StaticData.StaticData;
 using System.Diagnostics;
-using System.IO;
 using DerjavaToolbox;
-using static System.Net.Mime.MediaTypeNames;
-using System.Reflection.Emit;
+
 
 namespace WinFormsApp1
 {
@@ -28,6 +23,7 @@ namespace WinFormsApp1
         private bool isCompleteData;
         protected string innFlInfosMessage = "Нет данных";
         protected ToolTip tt = new ToolTip();
+        protected ToolTip warninToolTip = new ToolTip();
 
         public DerjavaTools()
         {
@@ -35,19 +31,42 @@ namespace WinFormsApp1
             Main_ProgressBar = formProgressBar;
             formProgressBar.BackColor = Color.DarkTurquoise;
             updateTable(SNILS_generator.checkSNILSwarehouse());
-            //foreach (var param in NeededDataChecker.neededDataChecker())
-            //{
+            Dictionary<string, bool> finalData = NeededDataChecker.neededDataChecker();
+            if (finalData.Values.Contains(false))
+            {
+                Blocker.needDataCheck(this);
+                foreach (var param in finalData)
+                {
 
-            //}
 
-            //NeededDataChecker.neededDataChecker();
+                    if (param.Value == false && param.Key == "ROOTcerExist")
+                    {
+                        Blocker.blockPanel.Controls.Add(Blocker.RootKeyLabelCreater());
+                    }
 
+                    if (param.Value == false && param.Key == "isCSPinstalled")
+                    {
+                        Blocker.blockPanel.Controls.Add(Blocker.CSPLabelCreater());
+                    }
 
+                    if (param.Value == false && param.Key == "isCSPpluginInstalled")
+                    {
+                        Blocker.blockPanel.Controls.Add(Blocker.CSPpluginLabelCreater());
+                    }
+                }
 
-            //Blocker.needDataCheck(this);
-            //Blocker.blockPanel.Controls.Add(Blocker.RootKeyLabelCreater());
-            //Blocker.blockPanel.Controls.Add(Blocker.CSPLabelCreater());
-            //Blocker.blockPanel.Controls.Add(Blocker.CSPpluginLabelCreater());
+                Blocker.blockPanel.Controls.Add(Blocker.openNeedeDataFolder());
+            }
+
+            if (NeededDataChecker.getCSPversion() < Version.Parse("6.0.0.0"))
+            {
+                infoWarnin.Visible = true;
+            }
+            else
+            {
+                infoWarnin.Visible = false;
+            }
+
         }
         private void downloadEGR_btn_Click(object sender, EventArgs e)
         {
@@ -502,7 +521,7 @@ namespace WinFormsApp1
             }
             Process.Start("explorer.exe", dir);
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void updateSNILS_btn_Click(object sender, EventArgs e)
         {
             MessageBoxButtons buttons = MessageBoxButtons.YesNo;
             DialogResult result = MessageBox.Show("При повторной генерации СНИЛС он будет привязан к новому ключу без возможности изменения?", "Внимание!", buttons, MessageBoxIcon.Question);
@@ -531,6 +550,10 @@ namespace WinFormsApp1
                 client.SNILS = form2.returnSelectedSNILS();
                 SNILS_input.Text = client.SNILS;
             }
+        }
+        private void infoWarnin_MouseEnter(object sender, EventArgs e)
+        {
+            warninToolTip.Show("Ваша текущая версия CryptoPRO CSP устарела. Ваша версия - " + NeededDataChecker.getCSPversion().ToString().Substring(0, 7) + ", актуальная версия 5.0+", infoWarnin);
         }
     }
 }

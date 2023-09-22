@@ -1,5 +1,6 @@
 ﻿namespace DerjavaToolbox.KeyGen.Program_logic.Utils;
 
+using Microsoft.Win32;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
@@ -66,11 +67,35 @@ public class NeededDataChecker
         }
         return CSPpluginKey;
     }
+
     public static Dictionary<string,bool> neededDataChecker()
     {
         neededData.Add("ROOTcerExist", isROOTcertExist());
         neededData.Add("isCSPinstalled", isCSPinstalled());
         neededData.Add("isCSPpluginInstalled", isCSPpluginInstalled());
         return neededData;
+    }
+
+    public static Version getCSPversion()
+    {
+        string registryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\08F19F05793DC7340B8C2621D83E5BE5\InstallProperties";
+        string displayVersion = "";
+
+            using (RegistryKey key = Registry.LocalMachine.OpenSubKey(registryPath))
+            {
+                if (key != null)
+                {
+                    displayVersion = key.GetValue("DisplayVersion") as string;
+                }
+
+            }
+            Version version = Version.Parse(displayVersion);
+
+            int major = version.Major;       // 5
+            int minor = version.Minor;       // 0
+            int build = version.Build;       // 12
+            int revision = version.Revision;
+
+        return version;
     }
 }

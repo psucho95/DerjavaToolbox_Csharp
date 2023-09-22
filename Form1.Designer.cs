@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DerjavaTools));
             KeyGenTab = new TabPage();
+            infoWarnin = new PictureBox();
             SysIdInfo_btn = new Button();
             Logs_btn = new Button();
             ManualEditing_panel = new Panel();
@@ -90,6 +91,7 @@
             INN_label = new Label();
             MainTabControl = new TabControl();
             KeyGenTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)infoWarnin).BeginInit();
             ManualEditing_panel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SNILS_DataGridView).BeginInit();
             subjectControl.SuspendLayout();
@@ -99,6 +101,7 @@
             // 
             // KeyGenTab
             // 
+            KeyGenTab.Controls.Add(infoWarnin);
             KeyGenTab.Controls.Add(SysIdInfo_btn);
             KeyGenTab.Controls.Add(Logs_btn);
             KeyGenTab.Controls.Add(ManualEditing_panel);
@@ -122,23 +125,35 @@
             KeyGenTab.Text = "Создание ключа";
             KeyGenTab.UseVisualStyleBackColor = true;
             // 
+            // infoWarnin
+            // 
+            infoWarnin.Image = (Image)resources.GetObject("infoWarnin.Image");
+            infoWarnin.Location = new Point(747, 49);
+            infoWarnin.Name = "infoWarnin";
+            infoWarnin.Size = new Size(20, 20);
+            infoWarnin.SizeMode = PictureBoxSizeMode.StretchImage;
+            infoWarnin.TabIndex = 65;
+            infoWarnin.TabStop = false;
+            infoWarnin.Visible = false;
+            infoWarnin.MouseEnter += infoWarnin_MouseEnter;
+            // 
             // SysIdInfo_btn
             // 
-            SysIdInfo_btn.Location = new Point(633, 33);
+            SysIdInfo_btn.Location = new Point(606, 33);
             SysIdInfo_btn.Name = "SysIdInfo_btn";
-            SysIdInfo_btn.Size = new Size(113, 23);
+            SysIdInfo_btn.Size = new Size(73, 23);
             SysIdInfo_btn.TabIndex = 64;
-            SysIdInfo_btn.Text = "Открыть выписки";
+            SysIdInfo_btn.Text = "Выписки";
             SysIdInfo_btn.UseVisualStyleBackColor = true;
             SysIdInfo_btn.Click += SysIdInfo_btn_Click;
             // 
             // Logs_btn
             // 
-            Logs_btn.Location = new Point(633, 6);
+            Logs_btn.Location = new Point(606, 6);
             Logs_btn.Name = "Logs_btn";
-            Logs_btn.Size = new Size(113, 23);
+            Logs_btn.Size = new Size(73, 23);
             Logs_btn.TabIndex = 63;
-            Logs_btn.Text = "Открыть логи";
+            Logs_btn.Text = "Логи";
             Logs_btn.UseVisualStyleBackColor = true;
             Logs_btn.Click += Logs_btn_Click;
             // 
@@ -381,7 +396,7 @@
             updateSNILS_btn.Size = new Size(22, 22);
             updateSNILS_btn.TabIndex = 61;
             updateSNILS_btn.UseVisualStyleBackColor = true;
-            updateSNILS_btn.Click += button1_Click;
+            updateSNILS_btn.Click += updateSNILS_btn_Click;
             // 
             // isINN_Fl_Exist
             // 
@@ -801,6 +816,7 @@
             Text = "Держава TollBox";
             KeyGenTab.ResumeLayout(false);
             KeyGenTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)infoWarnin).EndInit();
             ManualEditing_panel.ResumeLayout(false);
             ManualEditing_panel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)SNILS_DataGridView).EndInit();
@@ -875,5 +891,6 @@
         private Button Logs_btn;
         private Button updateSNILS_btn;
         private Button button1;
+        private PictureBox infoWarnin;
     }
 }

@@ -66,10 +66,4 @@
     <Folder Include="KeyGen\StaticData\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="ExtendedDotNET.Controls">
-      <HintPath>extendeddotnet.controls.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
