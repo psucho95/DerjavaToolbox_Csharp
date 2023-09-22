@@ -36,7 +36,6 @@
             Manual_JobTitle_chb = new CheckBox();
             Manual_NameLastName_chb = new CheckBox();
             Manual_Surname_chb = new CheckBox();
-            Manual_SNILS_chb = new CheckBox();
             Manual_INN_FL_chb = new CheckBox();
             SNILS_DataGridView = new DataGridView();
             Date_clmn = new DataGridViewTextBoxColumn();
@@ -51,6 +50,7 @@
             FL_rb = new RadioButton();
             formProgressBar = new ProgressBar();
             InputsPannel = new Panel();
+            updateSNILS_btn = new Button();
             isINN_Fl_Exist = new Label();
             CommonName_label = new Label();
             OGRNIP_input = new TextBox();
@@ -147,7 +147,6 @@
             ManualEditing_panel.Controls.Add(Manual_JobTitle_chb);
             ManualEditing_panel.Controls.Add(Manual_NameLastName_chb);
             ManualEditing_panel.Controls.Add(Manual_Surname_chb);
-            ManualEditing_panel.Controls.Add(Manual_SNILS_chb);
             ManualEditing_panel.Controls.Add(Manual_INN_FL_chb);
             ManualEditing_panel.Location = new Point(749, 75);
             ManualEditing_panel.Name = "ManualEditing_panel";
@@ -187,17 +186,6 @@
             Manual_Surname_chb.UseVisualStyleBackColor = true;
             Manual_Surname_chb.CheckedChanged += Manual_Surname_chb_CheckedChanged;
             // 
-            // Manual_SNILS_chb
-            // 
-            Manual_SNILS_chb.AutoSize = true;
-            Manual_SNILS_chb.Enabled = false;
-            Manual_SNILS_chb.Location = new Point(3, 392);
-            Manual_SNILS_chb.Name = "Manual_SNILS_chb";
-            Manual_SNILS_chb.Size = new Size(15, 14);
-            Manual_SNILS_chb.TabIndex = 61;
-            Manual_SNILS_chb.UseVisualStyleBackColor = true;
-            Manual_SNILS_chb.CheckedChanged += Manual_SNILS_chb_CheckedChanged;
-            // 
             // Manual_INN_FL_chb
             // 
             Manual_INN_FL_chb.AutoSize = true;
@@ -216,10 +204,13 @@
             SNILS_DataGridView.AllowUserToResizeColumns = false;
             SNILS_DataGridView.AllowUserToResizeRows = false;
             SNILS_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            SNILS_DataGridView.BackgroundColor = SystemColors.Control;
+            SNILS_DataGridView.BorderStyle = BorderStyle.None;
             SNILS_DataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             SNILS_DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             SNILS_DataGridView.Columns.AddRange(new DataGridViewColumn[] { Date_clmn, CommonName_clmn, INN_UL_clmn, FIO_clmn, INN_IP_clmn, SNILS_clmn });
             SNILS_DataGridView.Enabled = false;
+            SNILS_DataGridView.GridColor = SystemColors.Control;
             SNILS_DataGridView.Location = new Point(7, 542);
             SNILS_DataGridView.MultiSelect = false;
             SNILS_DataGridView.Name = "SNILS_DataGridView";
@@ -346,6 +337,7 @@
             // 
             // InputsPannel
             // 
+            InputsPannel.Controls.Add(updateSNILS_btn);
             InputsPannel.Controls.Add(isINN_Fl_Exist);
             InputsPannel.Controls.Add(CommonName_label);
             InputsPannel.Controls.Add(OGRNIP_input);
@@ -379,6 +371,17 @@
             InputsPannel.Name = "InputsPannel";
             InputsPannel.Size = new Size(739, 423);
             InputsPannel.TabIndex = 49;
+            // 
+            // updateSNILS_btn
+            // 
+            updateSNILS_btn.Enabled = false;
+            updateSNILS_btn.Image = (Image)resources.GetObject("updateSNILS_btn.Image");
+            updateSNILS_btn.Location = new Point(75, 388);
+            updateSNILS_btn.Name = "updateSNILS_btn";
+            updateSNILS_btn.Size = new Size(22, 22);
+            updateSNILS_btn.TabIndex = 61;
+            updateSNILS_btn.UseVisualStyleBackColor = true;
+            updateSNILS_btn.Click += button1_Click;
             // 
             // isINN_Fl_Exist
             // 
@@ -476,7 +479,6 @@
             SNILS_input.ReadOnly = true;
             SNILS_input.Size = new Size(637, 22);
             SNILS_input.TabIndex = 32;
-            SNILS_input.TextChanged += SNILS_input_TextChanged;
             // 
             // Subdivision_label
             // 
@@ -817,7 +819,6 @@
         private CheckBox Manual_JobTitle_chb;
         private CheckBox Manual_NameLastName_chb;
         private CheckBox Manual_Surname_chb;
-        private CheckBox Manual_SNILS_chb;
         private CheckBox Manual_INN_FL_chb;
         private DataGridView SNILS_DataGridView;
         private DataGridViewTextBoxColumn Date_clmn;
@@ -872,5 +873,7 @@
         private TabControl MainTabControl;
         private Button SysIdInfo_btn;
         private Button Logs_btn;
+        private Button updateSNILS_btn;
+        private Button button1;
     }
 }
