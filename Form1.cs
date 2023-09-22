@@ -13,6 +13,9 @@ using System.Text.RegularExpressions;
 using static WinFormsApp1.KeyGen.StaticData.StaticData;
 using System.Diagnostics;
 using System.IO;
+using DerjavaToolbox;
+using static System.Net.Mime.MediaTypeNames;
+using System.Reflection.Emit;
 
 namespace WinFormsApp1
 {
@@ -48,14 +51,12 @@ namespace WinFormsApp1
         }
         private void downloadEGR_btn_Click(object sender, EventArgs e)
         {
-
             FilesCreator.saveSysIdAsync(INN_input.Text);
             switch (INN_input.Text.Length)
             {
                 case 12: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_IP_Input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
                 case 10: MessageBoxCreator.craeteMessageBox("Выписка по инн " + INN_UL_input.Text + " была сохранена в папке SystemIdInfos", "Сохранение выписки", MessageBoxIcon.Information); break;
             }
-
         }
         private void INN_input_TextChanged(object sender, EventArgs e)
         {
@@ -116,7 +117,16 @@ namespace WinFormsApp1
                         OGRN_input.Text = client.OGRN;
                         INN_IP_Input.Text = client.INN_IP;
                         INN_UL_input.Text = client.INN_UL;
-                        SNILS_input.Text = client.SNILS;
+
+                        if (SNILS_generator.getSameSNILS().Count > 1)
+                        {
+                            ExistingSNILSselector();
+                        }
+                        else
+                        {
+                            SNILS_input.Text = client.SNILS;
+                        }
+
                         MassPropertyChanger.setCustomDisable(InputsPannel);
                         isINN_Fl_Exist.Visible = true;
                         if (await ResponseObj.checkIfExist(client.INN_IP))
@@ -153,8 +163,6 @@ namespace WinFormsApp1
                                 NameLastName_input.Text = client.NameLastName;
                                 JobTitle_input.Text = "Физическое лицо";
                                 INN_IP_Input.Text = client.INN_IP;
-                                SNILS_input.Text = client.SNILS;
-                                MassPropertyChanger.setCustomDisable(InputsPannel);
                                 break;
                             case "IP":
                                 CommonName_input.Text = subjectInfo[1] + " " + client.Surname + " " + client.NameLastName;
@@ -163,10 +171,17 @@ namespace WinFormsApp1
                                 JobTitle_input.Text = "Индивидуальный предприниматель";
                                 INN_IP_Input.Text = client.INN_IP;
                                 OGRN_input.Text = client.OGRN;
-                                SNILS_input.Text = client.SNILS;
-                                MassPropertyChanger.setCustomDisable(InputsPannel);
                                 break;
                         }
+                        if (SNILS_generator.getSameSNILS().Count > 1)
+                        {
+                            ExistingSNILSselector();
+                        }
+                        else
+                        {
+                            SNILS_input.Text = client.SNILS;
+                        }
+                        MassPropertyChanger.setCustomDisable(InputsPannel);
                         break;
                 }
                 downloadEGR_btn.Enabled = true;
@@ -174,6 +189,7 @@ namespace WinFormsApp1
                 showBrowser_chb.Enabled = true;
                 httpFix_chb.Enabled = true;
                 MassPropertyChanger.unbockManual(ManualEditing_panel, true);
+                updateSNILS_btn.Enabled = true;
             }
             catch (Exception exception)
             {
@@ -184,6 +200,7 @@ namespace WinFormsApp1
                 FilesCreator.Log_creator(exception);
                 MessageBoxCreator.craeteMessageBox("Данные по введённому ИНН отсутствуют!", "Ошибка получения данных", MessageBoxIcon.Error);
                 isINN_Fl_Exist.Visible = false;
+                updateSNILS_btn.Enabled = false;
             }
         }
         private void Subject_RadioButton_CheckedChanged(object sender, EventArgs e)
@@ -255,7 +272,6 @@ namespace WinFormsApp1
                                 case "Manual_NameLastName_chb": client.NameLastName = NameLastName_input.Text; break;
                                 case "Manual_JobTitle_chb": client.JobTitle = JobTitle_input.Text; break;
                                 case "Manual_INN_FL_chb": client.INN_IP = INN_IP_Input.Text; break;
-                                case "Manual_SNILS_chb": client.SNILS = SNILS_input.Text; break;
                             }
                         }
                     }
@@ -279,6 +295,7 @@ namespace WinFormsApp1
                 showBrowser_chb.Enabled = false;
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
+                updateSNILS_btn.Enabled = false;
 
                 await MessageBoxCreator.craeteMessageBox("Ключ с ИНН " + client.SubjectINN + " был успешно создан в системе", "Ключ был успешно создан", MessageBoxIcon.Information);
                 formProgressBar.Value = 0;
@@ -293,6 +310,8 @@ namespace WinFormsApp1
                 showBrowser_chb.Enabled = false;
                 registerINN_btn.Enabled = false;
                 downloadEGR_btn.Enabled = false;
+                updateSNILS_btn.Enabled = false;
+
                 INN_input.Clear();
 
                 if (Regex.IsMatch(exception.Message, "^[А-Яа-я]+$"))
@@ -336,11 +355,23 @@ namespace WinFormsApp1
         {
             if (e.RowIndex >= 0)
             {
-                int rowNumber = e.RowIndex;
-                string value = SNILS_DataGridView.Rows[rowNumber].Cells[4].Value.ToString();
+                switch (e.ColumnIndex)
+                {
+                    case 2:
+                        string INN_ULvalue = SNILS_DataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
+                        if (Regex.IsMatch(INN_ULvalue, @"^\d+$"))
+                        {
+                            Clipboard.SetText(INN_ULvalue);
+                            MessageBoxCreator.craeteMessageBox("ИНН ЮЛ " + INN_ULvalue + " был скопирован в буфер обмена", "ИНН ФЛ/ИП", MessageBoxIcon.Information);
+                        }
+                        break;
 
-                Clipboard.SetText(value);
-                MessageBoxCreator.craeteMessageBox("ИНН " + value + " был скопирован в буфер обмена", "ИНН ФЛ/ИП", MessageBoxIcon.Information);
+                    case 4:
+                        string INN_IPvalue = SNILS_DataGridView.Rows[e.RowIndex].Cells[4].Value.ToString();
+                        Clipboard.SetText(INN_IPvalue);
+                        MessageBoxCreator.craeteMessageBox("ИНН ФЛ/ИП " + INN_IPvalue + " был скопирован в буфер обмена", "ИНН ФЛ/ИП", MessageBoxIcon.Information);
+                        break;
+                }
             }
         }
         private void isINN_Fl_Exist_MouseEnter(object sender, EventArgs e)
@@ -354,7 +385,6 @@ namespace WinFormsApp1
         {
             tt.Hide(isINN_Fl_Exist);
         }
-
         private void Manual_Surname_chb_CheckedChanged(object sender, EventArgs e)
         {
             if (Manual_Surname_chb.Checked)
@@ -367,7 +397,6 @@ namespace WinFormsApp1
                 Surname_input.ReadOnly = true;
             }
         }
-
         private void Manual_NameLastName_chb_CheckedChanged(object sender, EventArgs e)
         {
             if (Manual_NameLastName_chb.Checked)
@@ -380,7 +409,6 @@ namespace WinFormsApp1
                 NameLastName_input.ReadOnly = true;
             }
         }
-
         private void Manual_JobTitle_chb_CheckedChanged(object sender, EventArgs e)
         {
             if (Manual_JobTitle_chb.Checked)
@@ -393,7 +421,6 @@ namespace WinFormsApp1
                 JobTitle_input.ReadOnly = true;
             }
         }
-
         private void Manual_INN_FL_chb_CheckedChanged(object sender, EventArgs e)
         {
             if (Manual_INN_FL_chb.Checked)
@@ -408,34 +435,6 @@ namespace WinFormsApp1
                 isINN_Fl_Exist.Visible = true;
             }
         }
-
-        private void Manual_SNILS_chb_CheckedChanged(object sender, EventArgs e)
-        {
-            if (Manual_SNILS_chb.Checked)
-            {
-                SNILS_input.ReadOnly = false;
-            }
-
-            else
-            {
-                SNILS_input.ReadOnly = true;
-            }
-        }
-
-        private void SNILS_input_TextChanged(object sender, EventArgs e)
-        {
-            if (SNILS_input.Text.Length < 11)
-            {
-                SNILS_input.ForeColor = Color.Red;
-                registerINN_btn.Enabled = false;
-            }
-            else
-            {
-                SNILS_input.ForeColor = Color.Black;
-                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
-            }
-        }
-
         private void INN_IP_Input_TextChanged(object sender, EventArgs e)
         {
             if (INN_IP_Input.Text.Length < 12)
@@ -446,10 +445,9 @@ namespace WinFormsApp1
             else
             {
                 INN_IP_Input.ForeColor = Color.Black;
-                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+                if (INN_IP_Input.Text.Length == 12 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
             }
         }
-
         private void Surname_input_TextChanged(object sender, EventArgs e)
         {
             if (Surname_input.Text.Length <= 0)
@@ -458,10 +456,9 @@ namespace WinFormsApp1
             }
             else
             {
-                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+                if (INN_IP_Input.Text.Length == 12 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
             }
         }
-
         private void NameLastName_input_TextChanged(object sender, EventArgs e)
         {
             if (NameLastName_input.Text.Length <= 0)
@@ -470,10 +467,9 @@ namespace WinFormsApp1
             }
             else
             {
-                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+                if (INN_IP_Input.Text.Length == 12 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
             }
         }
-
         private void JobTitle_input_TextChanged(object sender, EventArgs e)
         {
             if (JobTitle_input.Text.Length <= 0)
@@ -482,10 +478,9 @@ namespace WinFormsApp1
             }
             else
             {
-                if (INN_IP_Input.Text.Length == 12 && SNILS_input.Text.Length == 11 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
+                if (INN_IP_Input.Text.Length == 12 && Surname_input.Text.Length > 1 && NameLastName_input.Text.Length > 1 && JobTitle_input.Text.Length > 1) registerINN_btn.Enabled = true;
             }
         }
-
         private void Logs_btn_Click(object sender, EventArgs e)
         {
             string dir = rootDirectory + logFolderPath;
@@ -497,7 +492,6 @@ namespace WinFormsApp1
             Process.Start("explorer.exe", dir);
 
         }
-
         private void SysIdInfo_btn_Click(object sender, EventArgs e)
         {
             string dir = rootDirectory + sysIdInfosFolderPath;
@@ -507,6 +501,36 @@ namespace WinFormsApp1
                 Directory.CreateDirectory(dir);
             }
             Process.Start("explorer.exe", dir);
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult result = MessageBox.Show("При повторной генерации СНИЛС он будет привязан к новому ключу без возможности изменения?", "Внимание!", buttons, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                client.SNILS = SNILS_generator.GenerateSnils();
+                SNILS_input.Text = client.SNILS;
+            }
+        }
+        private void ExistingSNILSselector()
+        {
+            string[] SNILSarr = SNILS_generator.getSameSNILS().ToArray();
+            if (SNILSarr.Length > 1)
+            {
+                Form2 form2 = new Form2();
+
+                string inn = INN_IP_Input.Text;
+                form2.richTextBox1.Text = String.Format("ИНН ФЛ/ИП {0} связан со следующими СНИЛС", inn);
+                form2.richTextBox1.Select(10, 12); // выделяем текст
+                form2.richTextBox1.SelectionFont = new Font(form2.richTextBox1.Font, FontStyle.Bold); // устанавливаем жирный шрифт
+                foreach (var line in SNILSarr)
+                {
+                    form2.Selector_DataGridView.Rows.Add(line);
+                }
+                form2.ShowDialog();
+                client.SNILS = form2.returnSelectedSNILS();
+                SNILS_input.Text = client.SNILS;
+            }
         }
     }
 }

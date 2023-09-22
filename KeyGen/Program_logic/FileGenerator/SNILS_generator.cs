@@ -16,9 +16,10 @@ public class SNILS_generator
     protected static string finalResult;
     private static Dictionary<string, string> IPsDict = new Dictionary<string, string>();
     private static bool isValid = false;
+    private static List<string> SNILSwithSameINN = new List<string>();
 
 
-    private static string GenerateSnils()
+    public static string GenerateSnils()
     {
         Random rnd = new Random();
         int number = rnd.Next(999999999);
@@ -47,7 +48,6 @@ public class SNILS_generator
         {
             try
             {
-
                 using (StreamReader streamReader = File.OpenText(snilsFilePath))
                 {
                     string fileData = streamReader.ReadToEnd();
@@ -66,8 +66,6 @@ public class SNILS_generator
 
                     }
                 }
-
-
             }
 
             catch (Exception e)
@@ -129,13 +127,13 @@ public class SNILS_generator
 
     public static string setSNILS(string INN_IP)
     {
-
+        SNILSwithSameINN.Clear();
         foreach (var pair in IPsDict)
         {
             if (checkSNILSvalid(pair.Key) && pair.Value == INN_IP)
             {
                 SNILS = pair.Key;
-                break;
+                SNILSwithSameINN.Add(pair.Key);
             }
         }
 
@@ -145,32 +143,15 @@ public class SNILS_generator
         }
 
         return SNILS;
-
-
-        //if (IPsDict.ContainsValue(INN_IP))
-        //{
-        //    foreach (var pair in IPsDict)
-        //    {
-        //        if (checkSNILSvalid(pair.Key) && pair.Value == INN_IP)
-        //        {
-        //            SNILS = pair.Key;
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    SNILS = GenerateSnils();
-        //}
-        //return SNILS;
     }
 
     protected static bool checkSNILSvalid(string SNILS)
     {
         if (!String.IsNullOrEmpty(SNILS))
         {
-            // Массив сообщений об ошибках 
+
             List<string> error = new List<string>();
-            // Удаляем тире и пробелы  
+
             string number = SNILS.Replace(" ", "").Replace("-", "");
 
 
@@ -180,22 +161,26 @@ public class SNILS_generator
 
             if (error.Count == 0)
             {
-                // Вычисляем контрольную сумму  
+
                 int result = 0;
                 int total = number.Length;
                 for (int i = 0; i < total; i++)
                 {
                     result += (total - i) * int.Parse(number[i].ToString());
                 }
-                // Корректируем контрольное число  
+ 
                 if (result == 100 || result == 101) result = 0;
                 if (result > 101) result %= 101;
-                // Проверчем контрольное число  
                 if (result.ToString() == control) isValid = true;
                 else isValid = false;
             }
         }
 
         return isValid;
+    }
+
+    public static List<string> getSameSNILS()
+    {
+        return SNILSwithSameINN;
     }
 }

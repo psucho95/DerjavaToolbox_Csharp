@@ -106,7 +106,7 @@ public class RegisterPage : BasePage
 
             else if (INN_from_input.Length == 12 && subjectState[0].Equals("IP"))
             {
-                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
+                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + " " + Client.NameLastName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
                 progressBar.Value = 3;
@@ -120,7 +120,6 @@ public class RegisterPage : BasePage
                 progressBar.Value = 13;
                 mainPageDriver.FindElement(innIP).SendKeys(Client.INN_IP);
                 progressBar.Value = 15;
-
             }
 
             else if (INN_from_input.Length == 12 && subjectState[0].Equals("FL"))
