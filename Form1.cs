@@ -58,7 +58,7 @@ namespace WinFormsApp1
                 Blocker.blockPanel.Controls.Add(Blocker.openNeedeDataFolder());
             }
 
-            if (NeededDataChecker.getCSPversion() < Version.Parse("6.0.0.0"))
+            if (NeededDataChecker.getCSPversion() < Version.Parse("5.0.0.0"))
             {
                 infoWarnin.Visible = true;
             }

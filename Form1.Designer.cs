@@ -127,10 +127,10 @@
             // 
             // infoWarnin
             // 
-            infoWarnin.Image = (Image)resources.GetObject("infoWarnin.Image");
-            infoWarnin.Location = new Point(747, 49);
+            infoWarnin.Image = DerjavaToolbox.Properties.Resources.allertIco;
+            infoWarnin.Location = new Point(752, 54);
             infoWarnin.Name = "infoWarnin";
-            infoWarnin.Size = new Size(20, 20);
+            infoWarnin.Size = new Size(15, 15);
             infoWarnin.SizeMode = PictureBoxSizeMode.StretchImage;
             infoWarnin.TabIndex = 65;
             infoWarnin.TabStop = false;
@@ -139,7 +139,7 @@
             // 
             // SysIdInfo_btn
             // 
-            SysIdInfo_btn.Location = new Point(606, 33);
+            SysIdInfo_btn.Location = new Point(618, 33);
             SysIdInfo_btn.Name = "SysIdInfo_btn";
             SysIdInfo_btn.Size = new Size(73, 23);
             SysIdInfo_btn.TabIndex = 64;
@@ -149,7 +149,7 @@
             // 
             // Logs_btn
             // 
-            Logs_btn.Location = new Point(606, 6);
+            Logs_btn.Location = new Point(618, 6);
             Logs_btn.Name = "Logs_btn";
             Logs_btn.Size = new Size(73, 23);
             Logs_btn.TabIndex = 63;

@@ -44,8 +44,7 @@ public class NeededDataChecker
     }
     private static bool isCSPinstalled()
     {
-
-        if (File.Exists(cspX64) || File.Exists(cspX32))
+        if (Directory.Exists(csp))
         {
             CSPkey = true;
         }
@@ -57,7 +56,7 @@ public class NeededDataChecker
     }
     private static bool isCSPpluginInstalled()
     {
-        if (File.Exists(cspPluginX64) || File.Exists(cspPluginX32))
+        if (Directory.Exists(cspPlugin))
         {
             CSPpluginKey = true;
         }
@@ -78,6 +77,7 @@ public class NeededDataChecker
 
     public static Version getCSPversion()
     {
+        
         string registryPath = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Installer\UserData\S-1-5-18\Products\08F19F05793DC7340B8C2621D83E5BE5\InstallProperties";
         string displayVersion = "";
 
