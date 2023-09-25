@@ -4,6 +4,7 @@ using WinFormsApp1.KeyGen.API_logic;
 using static WinFormsApp1.KeyGen.StaticData.StaticData;
 using static WinFormsApp1.DerjavaTools;
 using static System.Windows.Forms.LinkLabel;
+using static ValidationsCollection.Validations;
 
 namespace WinFormsApp1.KeyGen.Program_logic.FileGenerator;
 

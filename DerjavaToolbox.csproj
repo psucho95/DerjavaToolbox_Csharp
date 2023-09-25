@@ -9,6 +9,7 @@
     <ApplicationIcon>bin\Debug\net7.0-windows\favicon.ico</ApplicationIcon>
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <StartupObject>WinFormsApp1.Program</StartupObject>
+    <PackageIcon>headerIcon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,6 +33,7 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
     <PackageReference Include="Selenium.WebDriver" Version="4.11.0" />
+    <PackageReference Include="ValidationsCollection" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -64,6 +66,13 @@
   <ItemGroup>
     <Folder Include="KeyGen\Program_logic\POM\" />
     <Folder Include="KeyGen\StaticData\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Release\net7.0-windows\ProgramData\Resources\visual\headerIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
