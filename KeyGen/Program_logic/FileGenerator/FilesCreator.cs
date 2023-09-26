@@ -9,7 +9,7 @@ public static class FilesCreator
 
     public static void Log_creator(Exception exception)
     {
-        string dir =  rootDirectory + logFolderPath;
+        string dir = logFolderPath;
 
         if (!Directory.Exists(dir))
         {
@@ -21,7 +21,7 @@ public static class FilesCreator
     public static async Task saveSysIdAsync(string INN)
     {
 
-        string dir = rootDirectory + sysIdInfosFolderPath;
+        string dir = sysIdInfosFolderPath;
 
         if (!Directory.Exists(dir))
         {

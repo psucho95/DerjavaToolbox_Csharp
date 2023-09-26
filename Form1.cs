@@ -348,7 +348,6 @@ namespace WinFormsApp1
                 MassPropertyChanger.disableAllSubjectControl(subjectControl);
                 client = null;
                 MassPropertyChanger.unbockManual(ManualEditing_panel, false);
-                MassPropertyChanger.uncheckManual(ManualEditing_panel);
                 isINN_Fl_Exist.Visible = false;
             }
         }
@@ -502,7 +501,7 @@ namespace WinFormsApp1
         }
         private void Logs_btn_Click(object sender, EventArgs e)
         {
-            string dir = rootDirectory + logFolderPath;
+            string dir = logFolderPath;
 
             if (!Directory.Exists(dir))
             {
@@ -513,7 +512,7 @@ namespace WinFormsApp1
         }
         private void SysIdInfo_btn_Click(object sender, EventArgs e)
         {
-            string dir = rootDirectory + sysIdInfosFolderPath;
+            string dir = sysIdInfosFolderPath;
 
             if (!Directory.Exists(dir))
             {

@@ -12,7 +12,7 @@ public class SNILS_generator
 {
     protected static Dictionary<string, string> snilsDictionary = new Dictionary<string, string>();
     protected static ArrayList existedFileData = new ArrayList();
-    protected static string SNILS = null;
+    protected static string SNILS = "37243346273";
     private static List<string> lines = new List<string>();
     protected static string finalResult;
     private static Dictionary<string, string> IPsDict = new Dictionary<string, string>();
@@ -115,8 +115,9 @@ public class SNILS_generator
                 lines.Add(finalResult);
                 File.AppendAllText(snilsFilePath, date + "~" + finalResult);
             }
-            return lines;
 
+            SNILS = null;
+            return lines;
         }
         catch (Exception e)
         {
@@ -128,10 +129,12 @@ public class SNILS_generator
 
     public static string setSNILS(string INN_IP)
     {
+        SNILS = null;
         SNILSwithSameINN.Clear();
+        
         foreach (var pair in IPsDict)
         {
-            if (checkSNILSvalid(pair.Key) && pair.Value == INN_IP)
+            if (IsValidSnils(pair.Key) && pair.Value == INN_IP)
             {
                 SNILS = pair.Key;
                 SNILSwithSameINN.Add(pair.Key);
@@ -144,40 +147,6 @@ public class SNILS_generator
         }
 
         return SNILS;
-    }
-
-    protected static bool checkSNILSvalid(string SNILS)
-    {
-        if (!String.IsNullOrEmpty(SNILS))
-        {
-
-            List<string> error = new List<string>();
-
-            string number = SNILS.Replace(" ", "").Replace("-", "");
-
-
-            string control = number.Substring(number.Length - 2);
-
-            number = number.Substring(0, 9);
-
-            if (error.Count == 0)
-            {
-
-                int result = 0;
-                int total = number.Length;
-                for (int i = 0; i < total; i++)
-                {
-                    result += (total - i) * int.Parse(number[i].ToString());
-                }
- 
-                if (result == 100 || result == 101) result = 0;
-                if (result > 101) result %= 101;
-                if (result.ToString() == control) isValid = true;
-                else isValid = false;
-            }
-        }
-
-        return isValid;
     }
 
     public static List<string> getSameSNILS()

@@ -125,7 +125,7 @@ public class MassPropertyChanger
             if (node is CheckBox)
             {
                 CheckBox checkBox = (CheckBox)node;
-                checkBox.Enabled = true;
+                checkBox.Enabled = Enabled;
             }
 
         }
