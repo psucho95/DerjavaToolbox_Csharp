@@ -628,6 +628,7 @@
             // 
             // CommonName_input
             // 
+            CommonName_input.Enabled = false;
             CommonName_input.Font = new Font("Segoe UI", 8F, FontStyle.Bold, GraphicsUnit.Point);
             CommonName_input.Location = new Point(102, 11);
             CommonName_input.Name = "CommonName_input";
@@ -635,6 +636,7 @@
             CommonName_input.ReadOnly = true;
             CommonName_input.Size = new Size(637, 22);
             CommonName_input.TabIndex = 12;
+            CommonName_input.Click += CommonName_input_Click;
             // 
             // FullAdress_input
             // 

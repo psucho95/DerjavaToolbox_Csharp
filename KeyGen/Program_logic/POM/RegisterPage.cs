@@ -125,7 +125,7 @@ public class RegisterPage : BasePage
             else if (INN_from_input.Length == 12 && subjectState[0].Equals("FL"))
             {
 
-                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + Client.NameLastName);
+                mainPageDriver.FindElement(commonName).SendKeys(subjectState[1] + " " + Client.Surname + " " + Client.NameLastName);
                 progressBar.Value = 1;
                 mainPageDriver.FindElement(surname).SendKeys(Client.Surname);
                 progressBar.Value = 3;

@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 using static WinFormsApp1.KeyGen.StaticData.StaticData;
 using System.Diagnostics;
 using DerjavaToolbox;
+using static WinFormsApp1.CommonUtils.DataCopyUtil;
 
 
 namespace WinFormsApp1
@@ -24,6 +25,7 @@ namespace WinFormsApp1
         protected string innFlInfosMessage = "Нет данных";
         protected ToolTip tt = new ToolTip();
         protected ToolTip warninToolTip = new ToolTip();
+
 
         public DerjavaTools()
         {
@@ -553,6 +555,12 @@ namespace WinFormsApp1
         private void infoWarnin_MouseEnter(object sender, EventArgs e)
         {
             warninToolTip.Show("Ваша текущая версия CryptoPRO CSP устарела. Ваша версия - " + NeededDataChecker.getCSPversion().ToString().Substring(0, 7) + ", актуальная версия 5.0+", infoWarnin);
+        }
+
+
+        private void CommonName_input_Click(object sender, EventArgs e)
+        {
+            DataCopyUtil.getInputData(CommonName_input);
         }
     }
 }

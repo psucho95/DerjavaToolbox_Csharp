@@ -17,15 +17,7 @@ public class Blocker
         int windowHeight = form.Height;
         int pbHeight = Main_ProgressBar.Location.Y;
         blockPanel.Width = 776;
-        if (windowHeight <= 610)
-        {
-            blockPanel.Height = windowHeight - 80;
-        }
-        else
-        {
-            blockPanel.Height = windowHeight - (windowHeight - pbHeight - 20);
-        }
-
+        blockPanel.Height = windowHeight - (windowHeight - pbHeight - 10);
         blockPanel.Controls.Add(waiterLabelCreater());
     }
     public static void deleteBlocker(Form form)
