@@ -5,7 +5,6 @@ public class MessageBoxCreator
 {
     public static async Task craeteMessageBox(string Message, string Header, MessageBoxIcon ico)
     {
-
         MessageBox.Show(
             Message,
             Header,

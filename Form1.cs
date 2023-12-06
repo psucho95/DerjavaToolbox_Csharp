@@ -11,6 +11,10 @@ using static WinFormsApp1.KeyGen.StaticData.StaticData;
 using System.Diagnostics;
 using DerjavaToolbox;
 using static WinFormsApp1.CommonUtils.DataCopyUtil;
+using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System;
 
 
 namespace WinFormsApp1
@@ -540,7 +544,7 @@ namespace WinFormsApp1
                 Form2 form2 = new Form2();
 
                 string inn = INN_IP_Input.Text;
-                form2.richTextBox1.Text = String.Format("ИНН ФЛ/ИП {0} связан со следующими СНИЛС", inn);
+                form2.richTextBox1.Text = System.String.Format("ИНН ФЛ/ИП {0} связан со следующими СНИЛС", inn);
                 form2.richTextBox1.Select(10, 12); // выделяем текст
                 form2.richTextBox1.SelectionFont = new Font(form2.richTextBox1.Font, FontStyle.Bold); // устанавливаем жирный шрифт
                 foreach (var line in SNILSarr)
@@ -561,6 +565,25 @@ namespace WinFormsApp1
         private void CommonName_input_Click(object sender, EventArgs e)
         {
             DataCopyUtil.getInputData(CommonName_input);
+        }
+
+        private void SNILS_DataGridView_KeyDown(object sender, KeyEventArgs e)
+        {
+           
+            if (e.KeyData == Keys.Delete)
+            {
+                DataGridViewRow currentRow = SNILS_DataGridView.CurrentRow;
+                DialogResult dialogResult = MessageBox.Show("Вы действительно хотите удалить запись " + currentRow.Cells[4].Value + " из системы?", "Удаление записи", MessageBoxButtons.OKCancel);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    string snilsToRemove = (string)currentRow.Cells[1].Value;
+                    string nameToRemove = (string)currentRow.Cells[4].Value;
+                    SNILS_DataGridView.Rows.Remove(SNILS_DataGridView.Rows[SNILS_DataGridView.CurrentRow.Index]);
+                    List<string> massOfSNILSdata = File.ReadAllLines(snilsFilePath).ToList();
+                    massOfSNILSdata.RemoveAll(item => item.Contains(snilsToRemove) && item.Contains(nameToRemove));
+                    File.WriteAllLines(snilsFilePath, massOfSNILSdata);
+                }
+            }
         }
     }
 }
