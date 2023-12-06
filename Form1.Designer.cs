@@ -120,7 +120,7 @@
             KeyGenTab.Location = new Point(4, 24);
             KeyGenTab.Name = "KeyGenTab";
             KeyGenTab.Padding = new Padding(3);
-            KeyGenTab.Size = new Size(771, 543);
+            KeyGenTab.Size = new Size(771, 658);
             KeyGenTab.TabIndex = 1;
             KeyGenTab.Text = "Создание ключа";
             KeyGenTab.UseVisualStyleBackColor = true;
@@ -215,7 +215,6 @@
             // SNILS_DataGridView
             // 
             SNILS_DataGridView.AllowUserToAddRows = false;
-            SNILS_DataGridView.AllowUserToDeleteRows = false;
             SNILS_DataGridView.AllowUserToResizeColumns = false;
             SNILS_DataGridView.AllowUserToResizeRows = false;
             SNILS_DataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -237,10 +236,11 @@
             SNILS_DataGridView.ShowCellToolTips = false;
             SNILS_DataGridView.ShowEditingIcon = false;
             SNILS_DataGridView.ShowRowErrors = false;
-            SNILS_DataGridView.Size = new Size(758, 0);
+            SNILS_DataGridView.Size = new Size(758, 115);
             SNILS_DataGridView.TabIndex = 0;
             SNILS_DataGridView.Visible = false;
             SNILS_DataGridView.CellClick += SNILS_DataGridView_CellClick;
+            SNILS_DataGridView.KeyDown += SNILS_DataGridView_KeyDown;
             // 
             // Date_clmn
             // 
@@ -798,7 +798,7 @@
             MainTabControl.Location = new Point(0, 0);
             MainTabControl.Name = "MainTabControl";
             MainTabControl.SelectedIndex = 0;
-            MainTabControl.Size = new Size(779, 571);
+            MainTabControl.Size = new Size(779, 686);
             MainTabControl.TabIndex = 5;
             // 
             // DerjavaTools
@@ -808,7 +808,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
-            ClientSize = new Size(779, 571);
+            ClientSize = new Size(779, 686);
             Controls.Add(MainTabControl);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
